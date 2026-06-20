@@ -1,0 +1,39 @@
+[
+  {
+    "slug": "hermes",
+    "date": "Jun 2026",
+    "title": "Two agents, one workflow",
+    "excerpt": "Setting up a Hermes agent on DeepSeek V4 Flash to run my journal and a newsletter — and why it worked.",
+    "meta": "Jun 18, 2026 · 3 min read",
+    "body": [
+      { "text": "I wired up a Hermes agent on DeepSeek V4 Flash this week and handed it two jobs I'd been doing by hand: keeping a journal and writing a newsletter. The setup took an afternoon. The payoff was immediate." },
+      { "text": "The first agent reads my day — commits, scattered notes, half-finished thoughts — and turns it into a journal entry I'd actually read back later. The second takes the same raw material and drafts a newsletter in my voice, not the model's." },
+      { "text": "What surprised me wasn't the writing. It was how little babysitting it needed once the prompts were tight. Flash is fast and cheap enough that I stopped thinking about cost and started thinking about the workflow." },
+      { "text": "This is the pattern I keep coming back to: AI in the loop, not in the driver's seat. It removes the bottleneck — the blank page, the context-switch — without pretending to be me." },
+      { "text": "More on the actual prompt structure and guardrails soon.", "italic": true }
+    ]
+  },
+  {
+    "slug": "plumbing",
+    "date": "May 2026",
+    "title": "ERP is just plumbing (and that's the point)",
+    "excerpt": "Nobody throws a party for the pipes — until they fail. Notes from the unglamorous layer.",
+    "meta": "May 2026 · 2 min read",
+    "body": [
+      { "text": "Nobody throws a party for the pipes. But when they fail, everyone notices." },
+      { "text": "Most of my work at Tracktile is the unglamorous layer underneath a factory: traceability, inventory, production. Get it right and it disappears. Get it wrong and a plant grinds to a halt." },
+      { "text": "Draft — I'll expand this one with a few real war stories.", "italic": true }
+    ]
+  },
+  {
+    "slug": "ailoop",
+    "date": "Apr 2026",
+    "title": "Building with AI in the loop without cutting corners",
+    "excerpt": "Speed and rigor aren't opposites. Where AI belongs in the workflow, and where it doesn't.",
+    "meta": "Apr 2026 · 2 min read",
+    "body": [
+      { "text": "Speed and rigor aren't opposites. The trick is putting AI where it removes friction — boilerplate, scaffolding, the first 80% — and keeping human judgment where it actually counts." },
+      { "text": "Draft — more to come.", "italic": true }
+    ]
+  }
+]

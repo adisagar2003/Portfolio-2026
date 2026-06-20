@@ -1,0 +1,15 @@
+{
+  "initials": "AS",
+  "name": "Aditya Sagar",
+  "role": "Cross-product ERP Engineer",
+  "company": { "name": "@Tracktile", "href": "https://tracktile.io" },
+  "location": "Charlottetown, PEI",
+  "bio": "Builds with AI and reduces development bottlenecks. Currently focused on building products and reaching speed and accuracy through agentic engineering — keeping quality in mind.",
+  "avatarUrl": "https://github.com/adisagar2003.png",
+  "githubUsername": "adisagar2003",
+  "socials": [
+    { "kind": "github", "label": "GitHub", "href": "https://github.com/adisagar2003" },
+    { "kind": "linkedin", "label": "LinkedIn", "href": "https://www.linkedin.com/in/aditya-sagar-upei/" },
+    { "kind": "email", "label": "Email", "href": "mailto:hello@adityasagar.dev" }
+  ]
+}

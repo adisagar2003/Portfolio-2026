@@ -1,0 +1,9 @@
+{
+  "heading": "Get in touch.",
+  "body": "Currently building at Tracktile, in Charlottetown — always happy to talk shop.",
+  "socials": [
+    { "kind": "github", "label": "GitHub", "href": "https://github.com/adisagar2003" },
+    { "kind": "linkedin", "label": "LinkedIn", "href": "https://www.linkedin.com/in/aditya-sagar-upei/" },
+    { "kind": "email", "label": "Email", "href": "mailto:hello@adityasagar.dev" }
+  ]
+}

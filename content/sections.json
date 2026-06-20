@@ -1,0 +1,106 @@
+[
+  {
+    "id": "work",
+    "index": "02",
+    "label": "Work",
+    "entries": [
+      {
+        "period": "2025 — Now",
+        "title": "Tracktile",
+        "subtitle": "Software Engineer · ERP",
+        "description": "Building the systems food & beverage manufacturers run their factories on — traceability, inventory, and production workflows. The plumbing that has to never go down. I ship full-stack features with AI in the loop, cutting the path from spec to production without cutting corners.",
+        "tags": [
+          { "label": "TypeScript" },
+          { "label": "React" },
+          { "label": "React Native" },
+          { "label": "Node" },
+          { "label": "PostgreSQL" },
+          { "label": "AI-assisted", "highlight": true }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "projects",
+    "index": "03",
+    "label": "Projects",
+    "entries": [
+      {
+        "period": "Dec 2025",
+        "title": "MoodWeave",
+        "href": "https://apps.apple.com/ca/app/moodweave-journal-and-reflect/id6755566217",
+        "subtitle": "Shipped to the App Store",
+        "description": "A private-first mood journal with AI analytics — your data stays yours, the insights come to you.",
+        "tags": [
+          { "label": "React Native" },
+          { "label": "Firebase" },
+          { "label": "iOS" }
+        ]
+      },
+      {
+        "period": "2026 — Now",
+        "title": "Groundwork",
+        "href": "https://groundwork-azure.vercel.app",
+        "subtitle": "In active development",
+        "active": true,
+        "description": "A current build, live and evolving. More to share soon."
+      },
+      {
+        "period": "2025",
+        "title": "Discover Charlottetown",
+        "href": "https://github.com/adisagar2003/discover-charlottetown",
+        "subtitle": "Full-stack · CI/CD to Fly.io",
+        "description": "A full-stack city guide with interactive mapping, built end to end and shipped through a real deployment pipeline.",
+        "tags": [
+          { "label": "React" },
+          { "label": "Node" },
+          { "label": "Express" },
+          { "label": "PostgreSQL" },
+          { "label": "Prisma" },
+          { "label": "Leaflet" }
+        ]
+      },
+      {
+        "period": "Ongoing",
+        "title": "Built for the love of it",
+        "subtitle": "Games & systems, on my own time",
+        "bullets": [
+          { "lead": "Unity FPS", "text": "wall-running, grapple, and enemy AI." },
+          { "lead": "Godot 8-bit game", "text": "own pixel art and music." },
+          { "lead": "Anomaly", "text": "a roguelike built around SOLID and clean design patterns." }
+        ],
+        "tags": [
+          { "label": "Unity" },
+          { "label": "Godot" },
+          { "label": "C#" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "index": "04",
+    "label": "Education",
+    "entries": [
+      {
+        "period": "Grad. May 2026",
+        "title": "University of Prince Edward Island",
+        "subtitle": "BASc, Computer Science · Charlottetown, PEI",
+        "description": "Computer Science, with a deliberately wide footprint — game dev, full-stack, mobile, blockchain. Exploring broadly before niching down."
+      }
+    ]
+  },
+  {
+    "id": "awards",
+    "index": "05",
+    "label": "Awards",
+    "entries": [
+      {
+        "period": "2025",
+        "title": "Winner — Ship I.T. 2025",
+        "subtitle": "PEI's first hackathon · RevenueCat-sponsored",
+        "description": "First place at the province's inaugural hackathon — built and shipped under the clock."
+      }
+    ]
+  }
+]
