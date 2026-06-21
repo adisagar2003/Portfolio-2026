@@ -1,0 +1,215 @@
+/* Admin tool styling — private editor UI, reuses the site's theme tokens
+   (defined in globals.css, available because the root layout wraps these). */
+
+.admin {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--txt);
+}
+
+.admin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(150%) blur(14px);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+  border-bottom: 1px solid var(--bord);
+}
+.admin-bar-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-brand {
+  font-family: var(--font-display);
+  color: var(--silver);
+  font-size: 15px;
+}
+.admin-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.admin-link {
+  color: var(--copper-2);
+  text-decoration: none;
+  font-size: 13px;
+}
+.admin-email {
+  font-size: 12px;
+}
+
+.admin-main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 20px 120px;
+}
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.admin-h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--silver);
+  margin: 0 0 4px;
+}
+.admin-h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--silver);
+  margin: 0 0 14px;
+}
+.admin-muted {
+  color: var(--txt-3);
+  font-size: 13px;
+  margin: 0 0 14px;
+}
+
+.admin-card {
+  border: 1px solid var(--bord);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+}
+.admin-subcard {
+  border: 1px solid var(--bord);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+  background: rgba(255, 255, 255, 0.015);
+}
+.admin-rowhead code,
+.admin-h2 code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--copper-2);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.admin-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--txt-2);
+}
+.admin-input {
+  background: var(--bg-2);
+  border: 1px solid var(--bord-2);
+  border-radius: 7px;
+  padding: 9px 11px;
+  color: var(--txt);
+  font: inherit;
+  font-size: 14px;
+  width: 100%;
+}
+.admin-input:focus-visible {
+  border-color: var(--copper);
+  outline: none;
+}
+textarea.admin-input {
+  resize: vertical;
+}
+.admin-mono {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--txt-2);
+  align-self: end;
+  padding-bottom: 9px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.admin-btn {
+  border: 1px solid var(--bord-2);
+  background: var(--card);
+  color: var(--silver);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.admin-btn:hover {
+  border-color: var(--copper);
+  color: var(--copper-2);
+}
+.admin-btn-primary {
+  background: var(--copper);
+  border-color: var(--copper);
+  color: #1a0f0a;
+}
+.admin-btn-primary:hover {
+  filter: brightness(1.08);
+  color: #1a0f0a;
+}
+.admin-btn-danger:hover {
+  border-color: #c0392b;
+  color: #e57368;
+}
+
+.admin-summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--copper-2);
+}
+
+.admin-banner {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.admin-ok {
+  background: rgba(80, 200, 120, 0.12);
+  border: 1px solid rgba(80, 200, 120, 0.35);
+  color: #8fe0a8;
+}
+.admin-error {
+  background: rgba(226, 74, 48, 0.12);
+  border: 1px solid rgba(226, 74, 48, 0.4);
+  color: var(--copper-2);
+}
+
+/* login */
+.admin-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+.admin-auth-card {
+  width: 100%;
+  max-width: 360px;
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import site from "@/content/site.json";
+import { getContent } from "@/lib/content";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -22,22 +22,25 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: site.title,
-  description: site.description,
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getContent();
+  return {
+    metadataBase: new URL(site.url),
     title: site.title,
     description: site.description,
-    url: site.url,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: site.title,
-    description: site.description,
-  },
-};
+    openGraph: {
+      title: site.title,
+      description: site.description,
+      url: site.url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: site.title,
+      description: site.description,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

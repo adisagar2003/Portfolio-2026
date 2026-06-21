@@ -9,6 +9,9 @@ import TimelineSection from "@/components/TimelineSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
+// Always render fresh from Supabase so content edits appear instantly.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { site, profile, posts, sections, contact } = await getContent();
 
