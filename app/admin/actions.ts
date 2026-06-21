@@ -118,7 +118,7 @@ export async function upsertPost(fd: FormData) {
         title: str(fd, "title"),
         excerpt: str(fd, "excerpt"),
         meta: str(fd, "meta"),
-        body: json(fd, "body"),
+        body_md: str(fd, "body"),
         sort_order: int(fd, "sort_order"),
         published: bool(fd, "published"),
       },

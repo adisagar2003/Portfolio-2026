@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { Post } from "@/lib/types";
 import { ArrowUpRight, ArrowLeft } from "@/components/icons";
 
@@ -81,14 +83,11 @@ export default function Writing({
           <article className="article">
             <div className="article-meta">{openPost.meta}</div>
             <h1 className="article-title">{openPost.title}</h1>
-            {openPost.body.map((para, i) => (
-              <p
-                key={i}
-                className={para.italic ? "article-p italic" : "article-p"}
-              >
-                {para.text}
-              </p>
-            ))}
+            <div className="article-md">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {openPost.body}
+              </ReactMarkdown>
+            </div>
           </article>
         </div>
       )}

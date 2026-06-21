@@ -116,7 +116,7 @@ export const getContent = cache(async (): Promise<PortfolioContent> => {
         title: p.title,
         excerpt: p.excerpt,
         meta: p.meta,
-        body: p.body ?? [],
+        body: p.body_md ?? "",
       })),
       sections: (sections.data ?? []).map(
         (s): Section => ({

@@ -107,7 +107,7 @@ export default async function AdminPage({
             </div>
             <Field label="Title" name="title" defaultValue={post.title} />
             <Area label="Excerpt" name="excerpt" defaultValue={post.excerpt} />
-            <Area label="Body (JSON: [{text, italic?}])" name="body" defaultValue={j(post.body)} mono />
+            <Area label="Body (markdown)" name="body" defaultValue={post.body_md ?? ""} rows={16} />
             <div className="admin-actions">
               <Save />
               <ConfirmDelete action={deletePost} idName="slug" idValue={post.slug} />
@@ -127,7 +127,12 @@ export default async function AdminPage({
             </div>
             <Field label="Title" name="title" />
             <Area label="Excerpt" name="excerpt" />
-            <Area label="Body (JSON)" name="body" defaultValue={'[\n  { "text": "First paragraph." }\n]'} mono />
+            <Area
+              label="Body (markdown)"
+              name="body"
+              defaultValue={"Write your post in **markdown**.\n\n## A section\n\nA paragraph with a [link](https://example.com)."}
+              rows={16}
+            />
             <Save label="Create post" />
           </form>
         </details>
@@ -231,11 +236,13 @@ function Area({
   name,
   defaultValue,
   mono = false,
+  rows,
 }: {
   label: string;
   name: string;
   defaultValue?: string;
   mono?: boolean;
+  rows?: number;
 }) {
   return (
     <label className="admin-label">
@@ -244,7 +251,7 @@ function Area({
         className={mono ? "admin-input admin-mono" : "admin-input"}
         name={name}
         defaultValue={defaultValue}
-        rows={mono ? 6 : 3}
+        rows={rows ?? (mono ? 6 : 3)}
       />
     </label>
   );

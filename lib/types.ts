@@ -21,12 +21,6 @@ export interface Profile {
   socials: SocialLink[];
 }
 
-/** A paragraph in a post body. `italic` renders muted/italic (e.g. "Draft — …"). */
-export interface PostParagraph {
-  text: string;
-  italic?: boolean;
-}
-
 export interface Post {
   slug: string;
   /** Short date shown in the list, e.g. "Jun 2026" */
@@ -35,7 +29,8 @@ export interface Post {
   excerpt: string;
   /** Full date + read time shown on the article page, e.g. "Jun 18, 2026 · 3 min read" */
   meta: string;
-  body: PostParagraph[];
+  /** Post body written in markdown; rendered to rich HTML on the article page. */
+  body: string;
 }
 
 export interface Tag {

@@ -751,16 +751,123 @@ button {
   margin: 0 0 28px;
   text-wrap: balance;
 }
-.article-p {
+/* rendered markdown prose */
+.article-md {
   font-size: 18px;
   line-height: 1.75;
   color: var(--txt);
+}
+.article-md > :first-child {
+  margin-top: 0;
+}
+.article-md > :last-child {
+  margin-bottom: 0;
+}
+.article-md p {
   margin: 0 0 22px;
 }
-.article-p.italic {
+.article-md h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 3.2vw, 28px);
+  letter-spacing: -0.02em;
+  color: var(--silver);
+  margin: 40px 0 16px;
+}
+.article-md h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(18px, 2.6vw, 22px);
+  letter-spacing: -0.01em;
+  color: var(--silver);
+  margin: 32px 0 12px;
+}
+.article-md a {
+  color: var(--copper-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.article-md a:hover {
+  color: var(--copper);
+}
+.article-md strong {
+  color: var(--silver);
+  font-weight: 700;
+}
+.article-md em {
   color: var(--txt-2);
-  margin: 0;
+}
+.article-md ul,
+.article-md ol {
+  margin: 0 0 22px;
+  padding-left: 1.4em;
+}
+.article-md li {
+  margin: 0 0 8px;
+}
+.article-md li::marker {
+  color: var(--copper);
+}
+.article-md blockquote {
+  margin: 0 0 22px;
+  padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--copper);
+  color: var(--txt-2);
   font-style: italic;
+}
+.article-md code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--card);
+  border: 1px solid var(--bord);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+.article-md pre {
+  background: var(--bg-2);
+  border: 1px solid var(--bord);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 0 0 22px;
+}
+.article-md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.article-md hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bord-2), transparent);
+  margin: 36px 0;
+}
+.article-md img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--bord);
+  margin: 8px 0 22px;
+}
+.article-md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 22px;
+  font-size: 15px;
+}
+.article-md th,
+.article-md td {
+  border: 1px solid var(--bord);
+  padding: 8px 12px;
+  text-align: left;
+}
+.article-md th {
+  color: var(--silver);
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 /* reveal-on-scroll initial state is applied inline by the client hook so that
