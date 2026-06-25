@@ -4,6 +4,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPost, getContent } from "@/lib/content";
+import { ArrowLeft } from "@/components/icons";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -49,23 +50,11 @@ export default async function WritingPage({ params }: Props) {
 
   return (
     <div className="root" id="top">
-      <article className="article-page">
+      <article>
         <nav className="article-nav">
           <div className="article-nav-inner">
             <Link href="/" className="article-back">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 12H5" />
-                <path d="M12 19l-7-7 7-7" />
-              </svg>
+              <ArrowLeft size={16} />
               Back
             </Link>
             <span className="article-logo metal">{profile.initials}</span>
