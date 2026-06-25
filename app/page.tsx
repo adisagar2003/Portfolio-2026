@@ -28,7 +28,7 @@ export default async function Home() {
 
           <div className="divider" aria-hidden="true" />
 
-          <Writing posts={posts} initials={profile.initials} />
+          <Writing posts={posts} />
 
           <ContributionGrid username={profile.githubUsername} />
         </header>
