@@ -5,6 +5,7 @@ import Image from "next/image";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
 import { articleMeta, metaDescription } from "@/lib/posts";
+import { buildArticleJsonLd } from "@/lib/jsonld";
 import { ArrowLeft } from "@/components/icons";
 
 interface Props {
@@ -50,10 +51,21 @@ export default async function WritingPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const { profile } = await getContent();
+  const { profile, site } = await getContent();
+  const jsonLd = buildArticleJsonLd({
+    post,
+    siteUrl: site.url,
+    siteName: site.title,
+    siteDescription: site.description,
+    authorName: profile.name,
+  });
 
   return (
     <div className="root" id="top">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article>
         <nav className="article-nav">
           <div className="article-nav-inner">
