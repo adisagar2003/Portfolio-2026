@@ -28,6 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(site.url),
     title: site.title,
     description: site.description,
+    alternates: {
+      types: { "application/rss+xml": "/feed.xml" },
+    },
     openGraph: {
       title: site.title,
       description: site.description,
