@@ -24,6 +24,20 @@ function optStr(v: unknown): string | undefined {
   return t === "" ? undefined : t;
 }
 
+/** Validate a delete request body: requires a non-empty string slug. */
+export function parseDeleteInput(
+  payload: unknown,
+): { ok: true; slug: string } | { ok: false; error: string } {
+  if (typeof payload !== "object" || payload === null || Array.isArray(payload)) {
+    return { ok: false, error: "Body must be a JSON object." };
+  }
+  const slug = (payload as Record<string, unknown>).slug;
+  if (typeof slug !== "string" || slug.trim() === "") {
+    return { ok: false, error: "slug is required and must be a non-empty string." };
+  }
+  return { ok: true, slug: slug.trim() };
+}
+
 export function parsePostInput(payload: unknown): ParseResult {
   if (typeof payload !== "object" || payload === null || Array.isArray(payload)) {
     return { ok: false, error: "Body must be a JSON object." };

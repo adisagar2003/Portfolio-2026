@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/service";
 import { slugify, buildMeta, autoExcerpt, uniqueSlug } from "@/lib/post-utils";
 import { postSummary } from "@/lib/posts";
-import { parsePostInput } from "@/lib/api-posts";
+import { parsePostInput, parseDeleteInput } from "@/lib/api-posts";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +69,43 @@ export async function GET(req: NextRequest) {
     }),
   );
   return NextResponse.json({ count: posts.length, posts });
+}
+
+/** Delete a post by slug. Body: { "slug": "..." }. */
+export async function DELETE(req: NextRequest) {
+  if (!process.env.BLOG_API_KEY) {
+    return bad(500, "BLOG_API_KEY is not configured on the server.");
+  }
+  if (!authorized(req)) return bad(401, "Invalid or missing API key.");
+
+  let payload: unknown;
+  try {
+    payload = await req.json();
+  } catch {
+    return bad(400, "Body must be valid JSON.");
+  }
+  const parsed = parseDeleteInput(payload);
+  if (!parsed.ok) return bad(400, parsed.error);
+
+  let supabase;
+  try {
+    supabase = createServiceClient();
+  } catch (e) {
+    return bad(500, (e as Error).message);
+  }
+
+  const { data, error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("slug", parsed.slug)
+    .select("slug")
+    .maybeSingle();
+  if (error) return bad(500, error.message);
+  if (!data) return bad(404, `No post with slug "${parsed.slug}".`);
+
+  revalidatePath("/");
+  revalidatePath(`/writing/${parsed.slug}`);
+  return NextResponse.json({ ok: true, deleted: parsed.slug });
 }
 
 export async function POST(req: NextRequest) {

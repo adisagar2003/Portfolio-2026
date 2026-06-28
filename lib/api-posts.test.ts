@@ -1,5 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { parsePostInput } from "./api-posts";
+import { parsePostInput, parseDeleteInput } from "./api-posts";
+
+describe("parseDeleteInput", () => {
+  it("requires a non-empty string slug", () => {
+    expect(parseDeleteInput({}).ok).toBe(false);
+    expect(parseDeleteInput({ slug: "" }).ok).toBe(false);
+    expect(parseDeleteInput({ slug: 5 }).ok).toBe(false);
+    expect(parseDeleteInput(null).ok).toBe(false);
+  });
+  it("trims and returns the slug", () => {
+    expect(parseDeleteInput({ slug: " my-post " })).toEqual({
+      ok: true,
+      slug: "my-post",
+    });
+  });
+});
 
 describe("parsePostInput", () => {
   it("rejects non-object payloads", () => {
