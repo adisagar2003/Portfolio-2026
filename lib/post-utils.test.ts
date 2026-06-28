@@ -9,6 +9,7 @@ import {
   uniqueSlug,
   clampText,
   isLenWarn,
+  wordCount,
 } from "./post-utils";
 
 describe("isLenWarn", () => {
@@ -113,6 +114,17 @@ describe("readTime", () => {
   it("scales with word count (~200 wpm)", () => {
     const words = Array.from({ length: 600 }, () => "word").join(" ");
     expect(readTime(words)).toBe(3);
+  });
+});
+
+describe("wordCount", () => {
+  it("ignores table pipes and punctuation-only tokens", () => {
+    const md = "| a | b |\n| --- | --- |\n| c | d |";
+    expect(wordCount(md)).toBe(4);
+  });
+
+  it("counts real words only", () => {
+    expect(wordCount("the quick brown fox")).toBe(4);
   });
 });
 

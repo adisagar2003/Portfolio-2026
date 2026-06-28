@@ -29,7 +29,12 @@ export function wordCount(md: string): number {
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links -> label
     .replace(/[#>*_~`-]/g, " ");
-  const words = text.trim().split(/\s+/).filter(Boolean);
+  // count only tokens with an alphanumeric char (drops table pipes, stray
+  // punctuation) so reading time isn't inflated.
+  const words = text
+    .trim()
+    .split(/\s+/)
+    .filter((w) => /[a-z0-9]/i.test(w));
   return words.length;
 }
 
