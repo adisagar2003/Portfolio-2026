@@ -27,6 +27,18 @@ export function readTime(md: string): number {
   return Math.max(1, Math.ceil(wordCount(md) / 200));
 }
 
+/** Flatten React-ish children (string | array | {props.children}) to plain text. */
+export function flattenText(node: unknown): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(flattenText).join("");
+  if (typeof node === "object" && "props" in (node as Record<string, unknown>)) {
+    const props = (node as { props?: { children?: unknown } }).props;
+    return flattenText(props?.children);
+  }
+  return "";
+}
+
 /** True for absolute http(s) links — those should open in a new, safe tab. */
 export function isExternalHref(href: string): boolean {
   return /^https?:\/\//i.test(href.trim());

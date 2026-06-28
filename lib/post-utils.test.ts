@@ -5,7 +5,27 @@ import {
   buildMeta,
   autoExcerpt,
   isExternalHref,
+  flattenText,
 } from "./post-utils";
+
+describe("flattenText", () => {
+  it("returns plain strings as-is", () => {
+    expect(flattenText("Hello")).toBe("Hello");
+  });
+  it("joins arrays of nodes", () => {
+    expect(flattenText(["a", "b", "c"])).toBe("abc");
+  });
+  it("descends into elements via props.children", () => {
+    expect(flattenText({ props: { children: "deep" } })).toBe("deep");
+    expect(
+      flattenText(["pre ", { props: { children: ["code", "!"] } }]),
+    ).toBe("pre code!");
+  });
+  it("ignores null/booleans", () => {
+    expect(flattenText(null)).toBe("");
+    expect(flattenText(true)).toBe("");
+  });
+});
 
 describe("isExternalHref", () => {
   it("treats absolute http(s) URLs as external", () => {
