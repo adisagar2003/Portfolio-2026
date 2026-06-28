@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/service";
 import { slugify, buildMeta, autoExcerpt, uniqueSlug } from "@/lib/post-utils";
 import { postSummary } from "@/lib/posts";
+import { parsePostInput } from "@/lib/api-posts";
 
 export const dynamic = "force-dynamic";
 
@@ -76,38 +77,31 @@ export async function POST(req: NextRequest) {
   }
   if (!authorized(req)) return bad(401, "Invalid or missing API key.");
 
-  let payload: Record<string, unknown>;
+  let payload: unknown;
   try {
     payload = await req.json();
   } catch {
     return bad(400, "Body must be valid JSON.");
   }
 
-  const title = String(payload.title ?? "").trim();
-  const body = String(payload.body ?? "").trim();
-  if (!title) return bad(400, "title is required.");
-  if (!body) return bad(400, "body (markdown) is required.");
+  const parsed = parsePostInput(payload);
+  if (!parsed.ok) return bad(400, parsed.error);
+  const input = parsed.value;
 
   // Always slugify — a raw slug with spaces/capitals would 404 on /writing/<slug>.
-  const slug = slugify(String(payload.slug ?? "").trim() || title).slice(0, 120);
+  const slug = slugify(input.slug || input.title).slice(0, 120);
   if (!slug) return bad(400, "Could not derive a slug; pass one explicitly.");
 
   const date =
-    String(payload.date ?? "").trim() ||
+    input.date ||
     new Date().toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
-  const excerpt =
-    String(payload.excerpt ?? "").trim() || autoExcerpt(body);
-  const meta = String(payload.meta ?? "").trim() || buildMeta(date, body);
-  const coverUrl = payload.cover_url ? String(payload.cover_url) : null;
-  const published = payload.published === undefined ? true : Boolean(payload.published);
-  const sortOrder = Number.isFinite(Number(payload.sort_order))
-    ? Number(payload.sort_order)
-    : 0;
-  const overwrite = Boolean(payload.overwrite);
+  const excerpt = input.excerpt || autoExcerpt(input.body);
+  const meta = input.meta || buildMeta(date, input.body);
+  const { body, title, coverUrl, published, sortOrder, overwrite } = input;
 
   let supabase;
   try {
