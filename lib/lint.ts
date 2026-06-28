@@ -20,6 +20,20 @@ export function lintPostBody(md: string): string[] {
     );
   }
 
+  // A top-level H1 in the body: the post title is already the page's H1.
+  let inFence = false;
+  let hasH1 = false;
+  for (const line of md.split("\n")) {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (!inFence && /^#\s+\S/.test(line)) hasH1 = true;
+  }
+  if (hasH1) {
+    warnings.push("Body has an H1 (#) — the title is the page heading; use ## instead.");
+  }
+
   // Empty link text: [](url)
   const emptyLink = (md.match(/(^|[^!])\[\s*\]\([^)]*\)/g) || []).length;
   if (emptyLink > 0) {
