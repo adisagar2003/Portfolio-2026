@@ -841,6 +841,22 @@ button {
 .article-md h3 {
   scroll-margin-top: 80px;
 }
+.heading-link {
+  margin-left: 8px;
+  color: var(--copper);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.article-md h2:hover .heading-link,
+.article-md h3:hover .heading-link,
+.heading-link:focus {
+  opacity: 0.7;
+}
+.heading-link:hover {
+  opacity: 1;
+}
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

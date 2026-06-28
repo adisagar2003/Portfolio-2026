@@ -27,8 +27,28 @@ export default function Markdown({ body }: { body: string }) {
   };
 
   const components: Components = {
-    h2: (p) => <h2 id={headingId(p.children)}>{p.children}</h2>,
-    h3: (p) => <h3 id={headingId(p.children)}>{p.children}</h3>,
+    h2: (p) => {
+      const id = headingId(p.children);
+      return (
+        <h2 id={id}>
+          {p.children}
+          <a href={`#${id}`} className="heading-link" aria-label="Link to this section">
+            #
+          </a>
+        </h2>
+      );
+    },
+    h3: (p) => {
+      const id = headingId(p.children);
+      return (
+        <h3 id={id}>
+          {p.children}
+          <a href={`#${id}`} className="heading-link" aria-label="Link to this section">
+            #
+          </a>
+        </h3>
+      );
+    },
     img(props) {
       // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
       return <img {...props} loading="lazy" decoding="async" />;
