@@ -8,7 +8,18 @@ import {
   metaDescription,
   adjacentPosts,
   postSummary,
+  isoDate,
 } from "./posts";
+
+describe("isoDate", () => {
+  it("returns YYYY-MM-DD from the publish date", () => {
+    expect(isoDate({ date: "Jun 24, 2026" })).toBe("2026-06-24");
+  });
+  it("returns empty string when there is no parseable date", () => {
+    expect(isoDate({ date: "nope" })).toBe("");
+    expect(isoDate({})).toBe("");
+  });
+});
 
 describe("postSummary", () => {
   it("maps a row to a compact API view", () => {

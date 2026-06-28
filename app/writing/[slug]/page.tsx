@@ -4,7 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
-import { articleMeta, metaDescription, adjacentPosts } from "@/lib/posts";
+import {
+  metaDescription,
+  adjacentPosts,
+  displayDateFor,
+  isoDate,
+} from "@/lib/posts";
+import { readTime } from "@/lib/post-utils";
 import { buildArticleJsonLd } from "@/lib/jsonld";
 import ReadingProgress from "@/components/ReadingProgress";
 import { ArrowLeft } from "@/components/icons";
@@ -93,7 +99,17 @@ export default async function WritingPage({ params }: Props) {
               />
             </div>
           ) : null}
-          <div className="article-meta">{articleMeta(post)}</div>
+          <div className="article-meta">
+            {displayDateFor(post) ? (
+              <>
+                <time dateTime={isoDate(post) || undefined}>
+                  {displayDateFor(post)}
+                </time>
+                {" · "}
+              </>
+            ) : null}
+            {readTime(post.body)} min read
+          </div>
           <h1 className="article-title">{post.title}</h1>
           <div className="article-md">
             <Markdown body={post.body} />

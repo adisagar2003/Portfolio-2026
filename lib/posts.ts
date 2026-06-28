@@ -49,6 +49,12 @@ export function displayDateFor(p: DatedPost): string {
   return formatPostDate(p.date ?? "") || formatPostDate(p.createdAt ?? "");
 }
 
+/** Machine-readable date "YYYY-MM-DD" (UTC) for <time datetime>, else "". */
+export function isoDate(p: DatedPost): string {
+  const ts = postTimestamp(p);
+  return ts > 0 ? new Date(ts).toISOString().slice(0, 10) : "";
+}
+
 /**
  * Consistent article meta line: "<date> · <N> min read", derived live from the
  * post's date + body so it always matches the list and the current content
