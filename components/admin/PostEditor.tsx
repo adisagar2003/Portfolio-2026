@@ -60,7 +60,29 @@ export default function PostEditor({
   const [cover, setCover] = useState(initial.cover_url ?? "");
   const [coverBusy, setCoverBusy] = useState(false);
   const [body, setBody] = useState(initial.body ?? "");
-  const [view, setView] = useState<View>("split");
+  const [view, setViewState] = useState<View>("split");
+  const setView: typeof setViewState = (v) => {
+    setViewState(v);
+    try {
+      const next =
+        typeof v === "function" ? (v as (p: View) => View)(view) : v;
+      localStorage.setItem("pe-view", next);
+    } catch {
+      /* ignore */
+    }
+  };
+  // restore the writer's preferred view on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("pe-view") as View | null;
+      if (saved === "write" || saved === "split" || saved === "preview") {
+        setViewState(saved);
+      }
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [uploading, setUploading] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
