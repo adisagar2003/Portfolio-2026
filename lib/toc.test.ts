@@ -45,4 +45,13 @@ describe("extractHeadings", () => {
   it("returns empty for no headings", () => {
     expect(extractHeadings("just a paragraph")).toEqual([]);
   });
+
+  it("dedupes ids when heading text repeats", () => {
+    const md = "## Setup\n\n## Setup\n\n## Setup\n";
+    expect(extractHeadings(md).map((h) => h.id)).toEqual([
+      "setup",
+      "setup-2",
+      "setup-3",
+    ]);
+  });
 });

@@ -1,4 +1,4 @@
-import { slugify } from "./post-utils";
+import { slugify, uniqueSlug } from "./post-utils";
 
 export interface Heading {
   level: 2 | 3;
@@ -31,6 +31,7 @@ export function activeHeadingId(
 
 export function extractHeadings(md: string): Heading[] {
   const out: Heading[] = [];
+  const seen: string[] = [];
   let inFence = false;
   for (const line of md.split("\n")) {
     if (/^\s*```/.test(line)) {
@@ -41,7 +42,9 @@ export function extractHeadings(md: string): Heading[] {
     const m = line.match(/^(#{2,3})\s+(.+?)\s*#*\s*$/);
     if (m) {
       const text = m[2].trim();
-      out.push({ level: m[1].length as 2 | 3, text, id: slugify(text) });
+      const id = uniqueSlug(slugify(text), seen);
+      seen.push(id);
+      out.push({ level: m[1].length as 2 | 3, text, id });
     }
   }
   return out;
