@@ -28,11 +28,19 @@ The `/admin` and `/login` routes need Supabase configured.
 
 ## Environment
 
-Both values are public (safe in the browser — reads are protected by RLS):
+The first two are public (safe in the browser — reads are protected by RLS):
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
+```
+
+Two **server-only secrets** are needed for the agent-facing blog API (below).
+Never expose these to the browser; set them in Vercel as well:
+
+```
+SUPABASE_SERVICE_ROLE_KEY=<service_role key>   # Supabase → Settings → API
+BLOG_API_KEY=<bearer token your agents send>   # any long random string
 ```
 
 ## Structure
@@ -101,6 +109,63 @@ Two ways:
    single Supabase user; public sign-ups are disabled.
 2. **JSON fallback** — when running without Supabase, edit the files in
    `content/` (`writing.json`, `sections.json`, etc.). No code changes needed.
+
+## Writing blog posts (`/admin`)
+
+The post editor is built for writing. Open `/admin`, expand **✍️ Write a new
+post** (it's pinned to the top), and:
+
+- **Markdown editor with live preview** — Write / Split / Preview modes; the
+  preview uses the *same* renderer as the public page, and in split view it
+  scroll-syncs with the editor.
+- **Formatting toolbar + shortcuts** — bold/italic/headings/quote/lists/link/
+  code/table, plus `⌘B` `⌘I` `⌘K` (link) `⌘S` (save). Tab indents; Enter
+  continues lists.
+- **Images** — upload via the toolbar, **drag-and-drop, or paste** straight in;
+  files go to the `blog-images` Supabase Storage bucket. The 🗂 **image
+  library** browses/reuses/deletes past uploads. Each post can also have a
+  **cover image** (article header + social card).
+- **Less typing** — slug auto-derives from the title, the meta line
+  (`date · N min read`) and excerpt auto-generate, and the date defaults to
+  today. **Duplicate as template** clones an existing post.
+- **Safety** — drafts autosave to your browser (with restore), an
+  unsaved-changes guard warns before you navigate away, and a slug-collision
+  guard blocks accidentally overwriting another post.
+- **Navigation** — 🔍 find & replace, ☰ document outline, distraction-free
+  fullscreen, and a searchable / draft-filterable / reorderable post list.
+
+Storage + cover columns are created by the migrations in `supabase/migrations/`
+(`0003_blog_images_storage.sql`, `0004_posts_cover_url.sql`).
+
+## Blog API (for agents)
+
+`POST /api/posts` lets a trusted agent publish a post without a browser
+session. It authenticates with the `BLOG_API_KEY` bearer token and writes via
+the Supabase service-role client (so both `SUPABASE_SERVICE_ROLE_KEY` and
+`BLOG_API_KEY` must be set).
+
+```bash
+curl -X POST https://<your-domain>/api/posts \
+  -H "Authorization: Bearer $BLOG_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "My post title",
+    "body": "# Hello\n\nWritten in **markdown**.",
+    "published": true
+  }'
+```
+
+- **Required:** `title`, `body` (markdown).
+- **Auto-derived if omitted:** `slug`, `excerpt`, `date`, `meta` (read time).
+- **Optional:** `cover_url`, `published` (default `true`), `sort_order`,
+  `overwrite` (default `false`).
+- **Responses:** `201` created (`{ ok, slug, url, post }`) · `401` bad/missing
+  key · `400` missing title/body · `409` slug already exists (pass
+  `"overwrite": true` to replace) · `500` server not configured.
+
+The handler (`app/api/posts/route.ts`) does a timing-safe key check and
+revalidates `/` and `/writing/[slug]` so new posts appear immediately. The
+`x-api-key: <key>` header works as an alternative to `Authorization: Bearer`.
 
 ## Deploy
 
