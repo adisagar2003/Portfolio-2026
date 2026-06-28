@@ -15,10 +15,12 @@ export default function PostList({
   posts,
   upsertPost,
   deletePost,
+  reorderPost,
 }: {
   posts: PostRow[];
   upsertPost: (fd: FormData) => void;
   deletePost: (fd: FormData) => void;
+  reorderPost: (fd: FormData) => void;
 }) {
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -27,6 +29,7 @@ export default function PostList({
   const [tplKey, setTplKey] = useState(0);
   const [newOpen, setNewOpen] = useState(posts.length === 0);
 
+  const ordered = q.trim() === "" && filter === "all";
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return posts.filter((p) => {
@@ -112,7 +115,7 @@ export default function PostList({
       </details>
 
       {/* Existing posts */}
-      {filtered.map((post) => (
+      {filtered.map((post, i) => (
         <details key={post.slug} className="admin-subcard">
           <summary className="admin-summary">
             {post.published ? "" : "🔒 "}
@@ -127,7 +130,43 @@ export default function PostList({
             >
               View ↗
             </a>
+            {ordered && (
+              <span className="pe-reorder">
+                <button
+                  type="submit"
+                  form={`reorder-up-${post.slug}`}
+                  className="pe-mini"
+                  disabled={i === 0}
+                  title="Move up"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  ↑
+                </button>
+                <button
+                  type="submit"
+                  form={`reorder-down-${post.slug}`}
+                  className="pe-mini"
+                  disabled={i === filtered.length - 1}
+                  title="Move down"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  ↓
+                </button>
+              </span>
+            )}
           </summary>
+          {ordered && (
+            <>
+              <form id={`reorder-up-${post.slug}`} action={reorderPost} hidden>
+                <input type="hidden" name="slug" value={post.slug} />
+                <input type="hidden" name="dir" value="up" />
+              </form>
+              <form id={`reorder-down-${post.slug}`} action={reorderPost} hidden>
+                <input type="hidden" name="slug" value={post.slug} />
+                <input type="hidden" name="dir" value="down" />
+              </form>
+            </>
+          )}
           <div style={{ marginTop: 14 }}>
             <PostEditor
               action={upsertPost}

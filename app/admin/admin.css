@@ -499,6 +499,14 @@ textarea.admin-input {
   display: flex;
   gap: 8px;
 }
+.pe-reorder {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+.pe-reorder .pe-mini {
+  padding: 1px 7px;
+}
 .pe-listbar {
   display: flex;
   gap: 10px;

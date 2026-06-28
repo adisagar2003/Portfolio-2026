@@ -132,6 +132,43 @@ export async function upsertPost(fd: FormData) {
   done(err, "post");
 }
 
+/** Swap a post's sort_order with its neighbour in the given direction. */
+export async function reorderPost(fd: FormData) {
+  const { supabase } = await requireAdmin();
+  let err: string | null = null;
+  try {
+    const slug = str(fd, "slug");
+    const dir = str(fd, "dir"); // "up" | "down"
+    const { data: posts, error } = await supabase
+      .from("posts")
+      .select("slug, sort_order")
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    const list = posts ?? [];
+    const i = list.findIndex((p) => p.slug === slug);
+    const j = dir === "up" ? i - 1 : i + 1;
+    if (i === -1 || j < 0 || j >= list.length) {
+      done(null, "post"); // nothing to do at the ends
+      return;
+    }
+    // swap the two sort_order values
+    const a = list[i];
+    const b = list[j];
+    const r1 = await supabase
+      .from("posts")
+      .update({ sort_order: b.sort_order })
+      .eq("slug", a.slug);
+    const r2 = await supabase
+      .from("posts")
+      .update({ sort_order: a.sort_order })
+      .eq("slug", b.slug);
+    if (r1.error || r2.error) throw new Error(r1.error?.message || r2.error?.message);
+  } catch (e) {
+    err = (e as Error).message;
+  }
+  done(err, "post-reordered");
+}
+
 export async function deletePost(fd: FormData) {
   const { supabase } = await requireAdmin();
   let err: string | null = null;

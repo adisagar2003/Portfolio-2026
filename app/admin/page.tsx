@@ -6,6 +6,7 @@ import {
   updateContact,
   upsertPost,
   deletePost,
+  reorderPost,
   updateSection,
   upsertEntry,
   deleteEntry,
@@ -96,6 +97,7 @@ export default async function AdminPage({
         <PostList
           upsertPost={upsertPost}
           deletePost={deletePost}
+          reorderPost={reorderPost}
           posts={postRows.map((post) => ({
             slug: post.slug,
             date: post.date,
