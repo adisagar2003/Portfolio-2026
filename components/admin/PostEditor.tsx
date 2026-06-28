@@ -374,6 +374,43 @@ export default function PostEditor({
       });
       return;
     }
+    if (e.key === "Enter" && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
+      // smart list continuation: continue "- ", "* ", or "N. " items;
+      // pressing Enter on an empty item exits the list.
+      const el = e.currentTarget;
+      if (el.selectionStart !== el.selectionEnd) return;
+      const pos = el.selectionStart;
+      const lineStart = body.lastIndexOf("\n", pos - 1) + 1;
+      const line = body.slice(lineStart, pos);
+      const m = line.match(/^(\s*)([-*]|\d+\.)\s+(.*)$/);
+      if (!m) return;
+      const [, indent, marker, content] = m;
+      if (content.trim() === "") {
+        // empty item -> remove the marker and break out of the list
+        e.preventDefault();
+        const next = body.slice(0, lineStart) + indent + body.slice(pos);
+        setBody(next);
+        const caret = lineStart + indent.length;
+        requestAnimationFrame(() => {
+          el.focus();
+          el.setSelectionRange(caret, caret);
+        });
+        return;
+      }
+      e.preventDefault();
+      const nextMarker = /^\d+\.$/.test(marker)
+        ? `${parseInt(marker, 10) + 1}.`
+        : marker;
+      const insert = `\n${indent}${nextMarker} `;
+      const next = body.slice(0, pos) + insert + body.slice(pos);
+      setBody(next);
+      const caret = pos + insert.length;
+      requestAnimationFrame(() => {
+        el.focus();
+        el.setSelectionRange(caret, caret);
+      });
+      return;
+    }
     if (!(e.metaKey || e.ctrlKey)) return;
     const k = e.key.toLowerCase();
     if (k === "s") {
