@@ -45,6 +45,7 @@ export default function PostEditor({
   const [full, setFull] = useState(false);
   const [help, setHelp] = useState(false);
   const [outlineOpen, setOutlineOpen] = useState(false);
+  const [seoOpen, setSeoOpen] = useState(false);
   const [findOpen, setFindOpen] = useState(false);
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
@@ -652,6 +653,13 @@ export default function PostEditor({
           >
             auto from body
           </button>
+          <button
+            type="button"
+            className="pe-mini"
+            onClick={() => setSeoOpen((s) => !s)}
+          >
+            {seoOpen ? "hide preview" : "search & social preview"}
+          </button>
           <span
             className={
               "pe-count" +
@@ -672,6 +680,8 @@ export default function PostEditor({
           placeholder="One-line summary shown in the list and as the social description."
         />
       </label>
+
+      {seoOpen && <SeoPreview title={title} excerpt={excerpt} slug={slug} cover={cover} />}
 
       {/* toolbar */}
       <div className="pe-toolbar">
@@ -933,6 +943,66 @@ function ToolBtn({
     <button type="button" className="pe-tool" title={title} onClick={onClick}>
       {children}
     </button>
+  );
+}
+
+function SeoPreview({
+  title,
+  excerpt,
+  slug,
+  cover,
+}: {
+  title: string;
+  excerpt: string;
+  slug: string;
+  cover: string;
+}) {
+  // host is only known in the browser; this component renders client-side
+  const host =
+    typeof window !== "undefined" ? window.location.host : "your-site.com";
+  const t = title.trim() || "Untitled post";
+  const desc =
+    excerpt.trim() || "Add an excerpt to control how this appears in search and social.";
+  const path = `/writing/${slug || "post-slug"}`;
+
+  return (
+    <div className="pe-seo">
+      {/* Google-style result */}
+      <div className="pe-seo-block">
+        <div className="pe-seo-label">Google result</div>
+        <div className="pe-seo-google">
+          <div className="pe-seo-url">
+            {host}
+            <span className="pe-seo-path"> › writing › {slug || "post-slug"}</span>
+          </div>
+          <div className="pe-seo-gtitle">{t}</div>
+          <div className="pe-seo-gdesc">{desc}</div>
+        </div>
+      </div>
+      {/* social card */}
+      <div className="pe-seo-block">
+        <div className="pe-seo-label">Social card</div>
+        <div className="pe-seo-card">
+          <div className="pe-seo-cover">
+            {cover ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={cover} alt="" />
+            ) : (
+              <span className="pe-empty">no cover image</span>
+            )}
+          </div>
+          <div className="pe-seo-cardbody">
+            <div className="pe-seo-cardhost">{host}</div>
+            <div className="pe-seo-cardtitle">{t}</div>
+            <div className="pe-seo-carddesc">{desc}</div>
+          </div>
+        </div>
+        <div className="pe-seo-label" style={{ marginTop: 2, opacity: 0.6 }}>
+          {host}
+          {path}
+        </div>
+      </div>
+    </div>
   );
 }
 
