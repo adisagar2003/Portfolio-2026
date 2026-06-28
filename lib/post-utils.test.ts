@@ -71,6 +71,11 @@ describe("slugify", () => {
     const s = slugify("A Mixed CASE Title 123");
     expect(s).not.toMatch(/[A-Z\s]/);
   });
+
+  it("transliterates accented characters instead of dropping them", () => {
+    expect(slugify("Café Münchën")).toBe("cafe-munchen");
+    expect(slugify("Crème brûlée")).toBe("creme-brulee");
+  });
 });
 
 describe("uniqueSlug", () => {

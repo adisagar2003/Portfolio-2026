@@ -3,6 +3,8 @@
 /** "My Post Title!" -> "my-post-title" */
 export function slugify(input: string): string {
   return input
+    .normalize("NFKD") // split accented letters into base + diacritic
+    .replace(/[̀-ͯ]/g, "") // drop the diacritics, keep the base letter
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9\s-]/g, "")
