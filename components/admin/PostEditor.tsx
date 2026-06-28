@@ -383,17 +383,22 @@ export default function PostEditor({
   }, [body]);
 
   function jumpTo(offset: number) {
-    const el = taRef.current;
-    if (!el) return;
+    // ensure the textarea is visible (it isn't in pure-preview view)
     setView((v) => (v === "preview" ? "split" : v));
-    requestAnimationFrame(() => {
+    const focusAndScroll = (tries = 0) => {
+      const el = taRef.current;
+      if (!el) {
+        if (tries < 3) requestAnimationFrame(() => focusAndScroll(tries + 1));
+        return;
+      }
       el.focus();
       el.setSelectionRange(offset, offset);
       // approximate scroll so the heading sits near the top
       const before = body.slice(0, offset).split("\n").length;
       const lineH = parseFloat(getComputedStyle(el).lineHeight) || 22;
       el.scrollTop = Math.max(0, (before - 2) * lineH);
-    });
+    };
+    requestAnimationFrame(() => focusAndScroll());
     setOutlineOpen(false);
   }
 
