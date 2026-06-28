@@ -1,23 +1,45 @@
 import { describe, it, expect } from "vitest";
-import { postTimestamp, sortPostsByDateDesc, formatPostDate } from "./posts";
+import {
+  postTimestamp,
+  sortPostsByDateDesc,
+  formatPostDate,
+  displayDateFor,
+} from "./posts";
 
 describe("postTimestamp", () => {
-  it("prefers createdAt (the real publish time)", () => {
+  it("prefers the authored display date (the intended publish date)", () => {
     const ts = postTimestamp({
-      createdAt: "2026-06-24T20:29:59.120Z",
-      date: "Jan 2020",
+      createdAt: "2020-01-01T00:00:00Z",
+      date: "Jun 24, 2026",
     });
-    expect(ts).toBe(Date.parse("2026-06-24T20:29:59.120Z"));
+    expect(ts).toBe(Date.parse("Jun 24, 2026"));
   });
 
-  it("falls back to the display date when createdAt is missing", () => {
-    const ts = postTimestamp({ date: "Jun 24, 2026" });
-    expect(ts).toBe(Date.parse("Jun 24, 2026"));
+  it("falls back to createdAt when the display date is missing/unparseable", () => {
+    expect(postTimestamp({ createdAt: "2026-06-24T20:29:59.120Z" })).toBe(
+      Date.parse("2026-06-24T20:29:59.120Z"),
+    );
+    expect(
+      postTimestamp({ date: "garbage", createdAt: "2026-06-24T20:29:59.120Z" }),
+    ).toBe(Date.parse("2026-06-24T20:29:59.120Z"));
   });
 
   it("returns 0 when nothing is parseable", () => {
     expect(postTimestamp({ date: "not a date" })).toBe(0);
     expect(postTimestamp({})).toBe(0);
+  });
+});
+
+describe("displayDateFor", () => {
+  it("normalizes the authored date to a consistent format", () => {
+    expect(displayDateFor({ date: "24 Jun 2026" })).toBe("Jun 24, 2026");
+    expect(displayDateFor({ date: "May 2026" })).toBe("May 1, 2026");
+  });
+
+  it("falls back to createdAt when the authored date is unparseable", () => {
+    expect(
+      displayDateFor({ date: "", createdAt: "2026-06-21T01:13:40Z" }),
+    ).toBe("Jun 21, 2026");
   });
 });
 

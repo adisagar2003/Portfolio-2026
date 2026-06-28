@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
-import { formatPostDate } from "@/lib/posts";
+import { displayDateFor } from "@/lib/posts";
 import { ArrowUpRight } from "@/components/icons";
 
 export default function Writing({
@@ -23,9 +23,7 @@ export default function Writing({
             href={`/writing/${post.slug}`}
             className="post-btn"
           >
-            <span className="post-date">
-              {formatPostDate(post.createdAt ?? "") || post.date}
-            </span>
+            <span className="post-date">{displayDateFor(post) || post.date}</span>
             <span>
               <span className="post-title">{post.title}</span>
               <span className="post-excerpt">{post.excerpt}</span>

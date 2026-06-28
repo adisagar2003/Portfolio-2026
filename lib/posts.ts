@@ -9,13 +9,22 @@ export interface DatedPost {
   date?: string;
 }
 
-/** Best-effort publish timestamp: createdAt first, then the display date, else 0. */
+/**
+ * Best-effort publish timestamp. Prefers the authored display date (the date
+ * the writer says it was published), falling back to the real createdAt
+ * timestamp, then 0 — so ordering reflects intent but never breaks.
+ */
 export function postTimestamp(p: DatedPost): number {
-  const fromCreated = p.createdAt ? Date.parse(p.createdAt) : NaN;
-  if (!Number.isNaN(fromCreated)) return fromCreated;
   const fromDate = p.date ? Date.parse(p.date) : NaN;
   if (!Number.isNaN(fromDate)) return fromDate;
+  const fromCreated = p.createdAt ? Date.parse(p.createdAt) : NaN;
+  if (!Number.isNaN(fromCreated)) return fromCreated;
   return 0;
+}
+
+/** The display date for a post: the authored date if parseable, else createdAt. */
+export function displayDateFor(p: DatedPost): string {
+  return formatPostDate(p.date ?? "") || formatPostDate(p.createdAt ?? "");
 }
 
 /** Newest-first, without mutating the input. */
