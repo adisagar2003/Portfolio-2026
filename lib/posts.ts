@@ -60,6 +60,22 @@ export function sortPostsByDateDesc<T extends DatedPost>(posts: T[]): T[] {
   return [...posts].sort((a, b) => postTimestamp(b) - postTimestamp(a));
 }
 
+/**
+ * Neighbours of a post within a newest-first list: `newer` (the more recent
+ * post) and `older` (the next one back). Either may be undefined at the ends.
+ */
+export function adjacentPosts<T extends { slug: string }>(
+  postsNewestFirst: T[],
+  slug: string,
+): { newer?: T; older?: T } {
+  const i = postsNewestFirst.findIndex((p) => p.slug === slug);
+  if (i === -1) return {};
+  return {
+    newer: i > 0 ? postsNewestFirst[i - 1] : undefined,
+    older: i < postsNewestFirst.length - 1 ? postsNewestFirst[i + 1] : undefined,
+  };
+}
+
 const FMT = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
-import { articleMeta, metaDescription } from "@/lib/posts";
+import { articleMeta, metaDescription, adjacentPosts } from "@/lib/posts";
 import { buildArticleJsonLd } from "@/lib/jsonld";
 import { ArrowLeft } from "@/components/icons";
 
@@ -51,7 +51,8 @@ export default async function WritingPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const { profile, site } = await getContent();
+  const { profile, site, posts } = await getContent();
+  const { newer, older } = adjacentPosts(posts, slug);
   const jsonLd = buildArticleJsonLd({
     post,
     siteUrl: site.url,
@@ -95,6 +96,30 @@ export default async function WritingPage({ params }: Props) {
           <div className="article-md">
             <Markdown body={post.body} />
           </div>
+
+          {(newer || older) && (
+            <nav className="article-more">
+              {older ? (
+                <Link href={`/writing/${older.slug}`} className="article-more-link">
+                  <span className="article-more-dir">← Older</span>
+                  <span className="article-more-title">{older.title}</span>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {newer ? (
+                <Link
+                  href={`/writing/${newer.slug}`}
+                  className="article-more-link article-more-next"
+                >
+                  <span className="article-more-dir">Newer →</span>
+                  <span className="article-more-title">{newer.title}</span>
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
+          )}
         </div>
       </article>
     </div>

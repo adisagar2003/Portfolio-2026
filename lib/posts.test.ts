@@ -6,7 +6,35 @@ import {
   displayDateFor,
   articleMeta,
   metaDescription,
+  adjacentPosts,
 } from "./posts";
+
+describe("adjacentPosts", () => {
+  const posts = [{ slug: "c" }, { slug: "b" }, { slug: "a" }]; // newest-first
+
+  it("returns newer and older neighbours", () => {
+    expect(adjacentPosts(posts, "b")).toEqual({
+      newer: { slug: "c" },
+      older: { slug: "a" },
+    });
+  });
+
+  it("has no newer for the first (newest) post", () => {
+    const r = adjacentPosts(posts, "c");
+    expect(r.newer).toBeUndefined();
+    expect(r.older).toEqual({ slug: "b" });
+  });
+
+  it("has no older for the last (oldest) post", () => {
+    const r = adjacentPosts(posts, "a");
+    expect(r.older).toBeUndefined();
+    expect(r.newer).toEqual({ slug: "b" });
+  });
+
+  it("returns empty when the slug is not found", () => {
+    expect(adjacentPosts(posts, "zzz")).toEqual({});
+  });
+});
 
 describe("metaDescription", () => {
   it("uses the authored excerpt when present", () => {
