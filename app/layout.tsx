@@ -3,6 +3,14 @@ import { Sora, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { getContent } from "@/lib/content";
 
+const supabaseOrigin = (() => {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).origin;
+  } catch {
+    return null;
+  }
+})();
+
 const sora = Sora({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -54,6 +62,12 @@ export default function RootLayout({
       data-theme="dark"
       className={`${sora.variable} ${hanken.variable} ${jetbrains.variable}`}
     >
+      {supabaseOrigin ? (
+        <head>
+          <link rel="preconnect" href={supabaseOrigin} crossOrigin="" />
+          <link rel="dns-prefetch" href={supabaseOrigin} />
+        </head>
+      ) : null}
       <body>{children}</body>
     </html>
   );

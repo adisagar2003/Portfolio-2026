@@ -14,6 +14,9 @@ import Footer from "@/components/Footer";
 // uncached "force-dynamic" cost (a Supabase round-trip) on every visit.
 export const revalidate = 300;
 
+// Canonical to the primary domain (the site is also served on *.vercel.app).
+export const metadata = { alternates: { canonical: "/" } };
+
 export default async function Home() {
   const { site, profile, posts, sections, contact } = await getContent();
 
