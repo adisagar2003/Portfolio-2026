@@ -31,6 +31,8 @@ export interface Post {
   meta: string;
   /** Post body written in markdown; rendered to rich HTML on the article page. */
   body: string;
+  /** Optional cover image (article header + social card). */
+  coverUrl?: string;
 }
 
 export interface Tag {
