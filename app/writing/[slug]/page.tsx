@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
 import { articleMeta, metaDescription } from "@/lib/posts";
@@ -66,8 +67,16 @@ export default async function WritingPage({ params }: Props) {
 
         <div className="article">
           {post.coverUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="article-cover" src={post.coverUrl} alt={post.title} />
+            <div className="article-cover-wrap">
+              <Image
+                className="article-cover"
+                src={post.coverUrl}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 680px) 100vw, 680px"
+              />
+            </div>
           ) : null}
           <div className="article-meta">{articleMeta(post)}</div>
           <h1 className="article-title">{post.title}</h1>
