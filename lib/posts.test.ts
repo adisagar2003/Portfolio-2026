@@ -4,6 +4,7 @@ import {
   sortPostsByDateDesc,
   formatPostDate,
   displayDateFor,
+  articleMeta,
 } from "./posts";
 
 describe("postTimestamp", () => {
@@ -65,6 +66,18 @@ describe("sortPostsByDateDesc", () => {
     const copy = [...posts];
     sortPostsByDateDesc(posts);
     expect(posts).toEqual(copy);
+  });
+});
+
+describe("articleMeta", () => {
+  it("builds a consistent 'date · N min read' line from date + body", () => {
+    expect(articleMeta({ date: "24 Jun 2026", body: "a b c" })).toBe(
+      "Jun 24, 2026 · 1 min read",
+    );
+  });
+
+  it("omits the date when there is none, keeping read time", () => {
+    expect(articleMeta({ body: "a b c" })).toBe("1 min read");
   });
 });
 

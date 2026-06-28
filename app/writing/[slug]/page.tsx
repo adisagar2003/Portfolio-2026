@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
+import { articleMeta } from "@/lib/posts";
 import { ArrowLeft } from "@/components/icons";
 
 interface Props {
@@ -67,7 +68,7 @@ export default async function WritingPage({ params }: Props) {
             // eslint-disable-next-line @next/next/no-img-element
             <img className="article-cover" src={post.coverUrl} alt={post.title} />
           ) : null}
-          <div className="article-meta">{post.meta}</div>
+          <div className="article-meta">{articleMeta(post)}</div>
           <h1 className="article-title">{post.title}</h1>
           <div className="article-md">
             <Markdown body={post.body} />

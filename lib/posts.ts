@@ -1,6 +1,7 @@
 // Pure helpers for ordering and displaying posts by their publish date.
-// Kept dependency-free and UTC-based so behaviour is deterministic everywhere
-// (server, client, and tests).
+// Kept UTC-based so behaviour is deterministic everywhere (server, client, tests).
+
+import { readTime } from "./post-utils";
 
 export interface DatedPost {
   /** real publish timestamp (ISO) — the reliable sort key */
@@ -25,6 +26,18 @@ export function postTimestamp(p: DatedPost): number {
 /** The display date for a post: the authored date if parseable, else createdAt. */
 export function displayDateFor(p: DatedPost): string {
   return formatPostDate(p.date ?? "") || formatPostDate(p.createdAt ?? "");
+}
+
+/**
+ * Consistent article meta line: "<date> · <N> min read", derived live from the
+ * post's date + body so it always matches the list and the current content
+ * (rather than a possibly-stale stored string).
+ */
+export function articleMeta(p: DatedPost & { body?: string }): string {
+  const date = displayDateFor(p);
+  const mins = readTime(p.body ?? "");
+  const read = `${mins} min read`;
+  return date ? `${date} · ${read}` : read;
 }
 
 /** Newest-first, without mutating the input. */
