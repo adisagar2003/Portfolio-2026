@@ -13,6 +13,7 @@ import {
   readTime,
   wordCount,
   isLenWarn,
+  firstImageUrl,
 } from "@/lib/post-utils";
 
 export interface PostInitial {
@@ -687,6 +688,15 @@ export default function PostEditor({
                     onClick={() => setCover("")}
                   >
                     Remove
+                  </button>
+                )}
+                {!cover && firstImageUrl(body) && (
+                  <button
+                    type="button"
+                    className="pe-mini"
+                    onClick={() => setCover(firstImageUrl(body)!)}
+                  >
+                    Use first image
                   </button>
                 )}
               </div>

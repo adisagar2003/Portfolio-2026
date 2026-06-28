@@ -10,7 +10,19 @@ import {
   clampText,
   isLenWarn,
   wordCount,
+  firstImageUrl,
 } from "./post-utils";
+
+describe("firstImageUrl", () => {
+  it("returns the first image URL", () => {
+    expect(firstImageUrl("text\n\n![alt](https://img/a.png)\n![](b.png)")).toBe(
+      "https://img/a.png",
+    );
+  });
+  it("returns null when there are no images", () => {
+    expect(firstImageUrl("just [a link](/x) here")).toBeNull();
+  });
+});
 
 describe("isLenWarn", () => {
   it("warns below min and above max, not within range", () => {

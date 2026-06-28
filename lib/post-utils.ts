@@ -38,6 +38,12 @@ export function wordCount(md: string): number {
   return words.length;
 }
 
+/** URL of the first markdown image in the body, or null if there is none. */
+export function firstImageUrl(md: string): string | null {
+  const m = md.match(/!\[[^\]]*\]\(\s*([^)\s]+)/);
+  return m ? m[1] : null;
+}
+
 /** Reading time in minutes, min 1, at ~200 wpm. */
 export function readTime(md: string): number {
   return Math.max(1, Math.ceil(wordCount(md) / 200));
