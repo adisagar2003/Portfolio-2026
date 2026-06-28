@@ -11,6 +11,7 @@ import {
   isoDate,
 } from "@/lib/posts";
 import { readTime } from "@/lib/post-utils";
+import { extractHeadings } from "@/lib/toc";
 import { buildArticleJsonLd } from "@/lib/jsonld";
 import ReadingProgress from "@/components/ReadingProgress";
 import { ArrowLeft } from "@/components/icons";
@@ -112,6 +113,24 @@ export default async function WritingPage({ params }: Props) {
             {readTime(post.body)} min read
           </div>
           <h1 className="article-title">{post.title}</h1>
+          {(() => {
+            const toc = extractHeadings(post.body);
+            return toc.length >= 3 ? (
+              <nav className="article-toc" aria-label="Table of contents">
+                <div className="article-toc-label">On this page</div>
+                <ul>
+                  {toc.map((h) => (
+                    <li
+                      key={h.id}
+                      className={h.level === 3 ? "article-toc-sub" : undefined}
+                    >
+                      <a href={`#${h.id}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ) : null;
+          })()}
           <div className="article-md">
             <Markdown body={post.body} />
           </div>

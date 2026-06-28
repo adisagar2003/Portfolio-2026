@@ -837,6 +837,44 @@ button {
   background: linear-gradient(90deg, var(--copper), var(--copper-2));
   will-change: transform;
 }
+.article-md h2,
+.article-md h3 {
+  scroll-margin-top: 80px;
+}
+.article-toc {
+  margin: 0 0 36px;
+  padding: 16px 18px;
+  border: 1px solid var(--bord);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.015);
+}
+.article-toc-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--txt-3);
+  margin-bottom: 8px;
+}
+.article-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.article-toc-sub {
+  padding-left: 16px;
+}
+.article-toc a {
+  color: var(--txt-2);
+  text-decoration: none;
+  font-size: 14px;
+}
+.article-toc a:hover {
+  color: var(--copper-2);
+}
 .article-more {
   display: grid;
   grid-template-columns: 1fr 1fr;
