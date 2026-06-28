@@ -66,10 +66,20 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
   float split_point = 0.1 + split_offset;
 
   float amplitude_normal = smoothstep(split_point, 0.7, st.x);
-  float amplitude_strength = 0.5;
-  float finalAmplitude = amplitude_normal * amplitude_strength * amplitude * (1.0 + (mouse.y - 0.5) * 0.08);
 
-  float time_scaled = time / 10.0 + (mouse.x - 0.5) * 0.25;
+  // Cursor reactivity: how close this pixel's column is to the cursor.
+  float mouseDistX = abs(st.x - mouse.x);
+  float prox = exp(-mouseDistX * mouseDistX * 16.0); // ~1 near the cursor column
+
+  float amplitude_strength = 0.5;
+  float finalAmplitude = amplitude_normal * amplitude_strength * amplitude
+    * (1.0 + (mouse.y - 0.5) * 0.35)   // vertical position swings the whole field
+    * (1.0 + prox * 2.6);              // strong local energy under the cursor
+
+  // Cursor drives the flow phase + a ripple radiating from the cursor column.
+  float time_scaled = time / 10.0 + (mouse.x - 0.5) * 0.7;
+  float ripple = sin((mouseDistX * 26.0) - time * 2.2) * prox * 0.05;
+
   float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
 
   float xnoise = mix(
@@ -78,7 +88,11 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
     st.x * 0.3
   );
 
-  float y = 0.5 + (perc - 0.5) * distance + xnoise / 2.0 * finalAmplitude;
+  float y = 0.5 + (perc - 0.5) * distance + xnoise / 2.0 * finalAmplitude + ripple;
+
+  // Repel: push filaments vertically away from the cursor for a tactile feel.
+  float dy = y - mouse.y;
+  y += prox * 0.07 * sign(dy) * (1.0 - smoothstep(0.0, 0.22, abs(dy)));
 
   float line_start = smoothstep(
     y + (width / 2.0) + (u_line_blur * pixel(1.0, iResolution.xy) * blur),
@@ -106,6 +120,13 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   }
 
   float colorVal = 1.0 - strength;
+
+  // Faint copper halo that follows the cursor, so motion is visible even
+  // over sparse areas of the field.
+  float md = distance(uv, uMouse);
+  float glow = exp(-md * md * 14.0) * 0.16;
+  colorVal = clamp(colorVal + glow, 0.0, 1.0);
+
   fragColor = vec4(uColor * colorVal, colorVal);
 }
 
@@ -199,8 +220,9 @@ export default function ShaderBackground() {
     function frame(t: number) {
       rafId = requestAnimationFrame(frame);
       const u = program.uniforms.uMouse.value as Float32Array;
-      current[0] += (target[0] - current[0]) * 0.05;
-      current[1] += (target[1] - current[1]) * 0.05;
+      // snappier follow so the field clearly tracks the cursor
+      current[0] += (target[0] - current[0]) * 0.12;
+      current[1] += (target[1] - current[1]) * 0.12;
       u[0] = current[0];
       u[1] = current[1];
       program.uniforms.iTime.value = t * 0.001;
