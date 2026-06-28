@@ -1,5 +1,8 @@
 # Aditya Sagar — Portfolio
 
+<img width="1484" height="1452" alt="image" src="https://github.com/user-attachments/assets/4f9349f4-a529-46a9-82ba-295fb8a1e99a" />
+
+
 Personal portfolio built with Next.js (App Router) + TypeScript. Content is
 served from Supabase through a single data function, with a built-in `/admin`
 editor for editing copy, posts, and timeline entries — and a bundled JSON
