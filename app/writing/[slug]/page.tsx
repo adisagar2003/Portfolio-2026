@@ -6,6 +6,7 @@ import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
 import { articleMeta, metaDescription, adjacentPosts } from "@/lib/posts";
 import { buildArticleJsonLd } from "@/lib/jsonld";
+import ReadingProgress from "@/components/ReadingProgress";
 import { ArrowLeft } from "@/components/icons";
 
 interface Props {
@@ -63,6 +64,7 @@ export default async function WritingPage({ params }: Props) {
 
   return (
     <div className="root" id="top">
+      <ReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

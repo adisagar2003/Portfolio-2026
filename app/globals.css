@@ -727,6 +727,23 @@ button {
   margin: 0 auto;
   padding: clamp(44px, 8vw, 80px) clamp(20px, 5vw, 40px) 120px;
 }
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
+}
+.reading-progress-bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--copper), var(--copper-2));
+  will-change: transform;
+}
 .article-more {
   display: grid;
   grid-template-columns: 1fr 1fr;
