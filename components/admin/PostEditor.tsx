@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import Markdown from "@/components/Markdown";
 import { createClient } from "@/lib/supabase/client";
 import {
