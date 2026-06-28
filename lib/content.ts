@@ -8,8 +8,9 @@ import type {
   SiteMeta,
   TimelineEntry,
 } from "@/lib/types";
-import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
+import { sortPostsByDateDesc } from "@/lib/posts";
 
 // JSON fallback (used until Supabase env vars + seeded tables exist, and for
 // local dev / resilience if a query fails).
@@ -39,7 +40,7 @@ export const getContent = cache(async (): Promise<PortfolioContent> => {
   if (!hasSupabaseEnv()) return fromJson();
 
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const [site, profile, posts, sections, entries, contact] =
       await Promise.all([
         supabase.from("site").select("*").eq("id", 1).single(),
@@ -110,15 +111,18 @@ export const getContent = cache(async (): Promise<PortfolioContent> => {
         githubUsername: profile.data.github_username,
         socials: profile.data.socials ?? [],
       },
-      posts: (posts.data ?? []).map((p) => ({
-        slug: p.slug,
-        date: p.date,
-        title: p.title,
-        excerpt: p.excerpt,
-        meta: p.meta,
-        body: p.body_md ?? "",
-        coverUrl: p.cover_url ?? undefined,
-      })),
+      posts: sortPostsByDateDesc(
+        (posts.data ?? []).map((p) => ({
+          slug: p.slug,
+          date: p.date,
+          title: p.title,
+          excerpt: p.excerpt,
+          meta: p.meta,
+          body: p.body_md ?? "",
+          coverUrl: p.cover_url ?? undefined,
+          createdAt: p.created_at ?? undefined,
+        })),
+      ),
       sections: (sections.data ?? []).map(
         (s): Section => ({
           id: s.id,

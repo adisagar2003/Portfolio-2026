@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
   if (!title) return bad(400, "title is required.");
   if (!body) return bad(400, "body (markdown) is required.");
 
-  const slug = (String(payload.slug ?? "").trim() || slugify(title)).slice(0, 120);
+  // Always slugify — a raw slug with spaces/capitals would 404 on /writing/<slug>.
+  const slug = slugify(String(payload.slug ?? "").trim() || title).slice(0, 120);
   if (!slug) return bad(400, "Could not derive a slug; pass one explicitly.");
 
   const date =

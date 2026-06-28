@@ -9,8 +9,10 @@ import TimelineSection from "@/components/TimelineSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-// Always render fresh from Supabase so content edits appear instantly.
-export const dynamic = "force-dynamic";
+// Cached and rebuilt at most every 5 min; admin saves and the posts API call
+// revalidatePath("/") so edits still appear immediately without paying the
+// uncached "force-dynamic" cost (a Supabase round-trip) on every visit.
+export const revalidate = 300;
 
 export default async function Home() {
   const { site, profile, posts, sections, contact } = await getContent();

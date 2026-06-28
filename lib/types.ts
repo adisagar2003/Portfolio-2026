@@ -33,6 +33,8 @@ export interface Post {
   body: string;
   /** Optional cover image (article header + social card). */
   coverUrl?: string;
+  /** Real publish timestamp (ISO) — reliable sort key + consistent display. */
+  createdAt?: string;
 }
 
 export interface Tag {

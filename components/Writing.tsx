@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
+import { formatPostDate } from "@/lib/posts";
 import { ArrowUpRight } from "@/components/icons";
 
 export default function Writing({
@@ -22,7 +23,9 @@ export default function Writing({
             href={`/writing/${post.slug}`}
             className="post-btn"
           >
-            <span className="post-date">{post.date}</span>
+            <span className="post-date">
+              {formatPostDate(post.createdAt ?? "") || post.date}
+            </span>
             <span>
               <span className="post-title">{post.title}</span>
               <span className="post-excerpt">{post.excerpt}</span>
@@ -34,7 +37,7 @@ export default function Writing({
         ))}
 
         <p className="writing-note">
-          Authored as MDX — drop a file in /content to add a post.
+          Written in markdown via the /admin editor.
         </p>
       </div>
     </>
