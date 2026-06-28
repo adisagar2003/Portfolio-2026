@@ -89,9 +89,9 @@ export default async function WritingPage({ params }: Props) {
       <article>
         <nav className="article-nav">
           <div className="article-nav-inner">
-            <Link href="/" className="article-back">
+            <Link href="/#writing" className="article-back">
               <ArrowLeft size={16} />
-              Back
+              Back to writing
             </Link>
             <span className="article-logo metal">{profile.initials}</span>
           </div>
