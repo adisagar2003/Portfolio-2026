@@ -119,6 +119,7 @@ export async function upsertPost(fd: FormData) {
         excerpt: str(fd, "excerpt"),
         meta: str(fd, "meta"),
         body_md: str(fd, "body"),
+        cover_url: strOrNull(fd, "cover_url"),
         sort_order: int(fd, "sort_order"),
         published: bool(fd, "published"),
       },

@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/supabase/admin";
+import PostList from "@/components/admin/PostList";
 import {
   updateSite,
   updateProfile,
@@ -92,50 +93,21 @@ export default async function AdminPage({
 
       {/* POSTS ------------------------------------------------------------- */}
       <section className="admin-card">
-        <h2 className="admin-h2">Writing posts</h2>
-        {postRows.map((post) => (
-          <form key={post.slug} action={upsertPost} className="admin-form admin-subcard">
-            <input type="hidden" name="slug" value={post.slug} />
-            <div className="admin-rowhead">
-              <code>{post.slug}</code>
-            </div>
-            <div className="admin-grid">
-              <Field label="Date" name="date" defaultValue={post.date} />
-              <Field label="Meta" name="meta" defaultValue={post.meta} />
-              <Field label="Sort order" name="sort_order" type="number" defaultValue={String(post.sort_order)} />
-              <Check label="Published" name="published" defaultChecked={post.published} />
-            </div>
-            <Field label="Title" name="title" defaultValue={post.title} />
-            <Area label="Excerpt" name="excerpt" defaultValue={post.excerpt} />
-            <Area label="Body (markdown)" name="body" defaultValue={post.body_md ?? ""} rows={16} />
-            <div className="admin-actions">
-              <Save />
-              <ConfirmDelete action={deletePost} idName="slug" idValue={post.slug} />
-            </div>
-          </form>
-        ))}
-
-        <details className="admin-subcard">
-          <summary className="admin-summary">+ New post</summary>
-          <form action={upsertPost} className="admin-form">
-            <Field label="Slug" name="slug" placeholder="my-post" />
-            <div className="admin-grid">
-              <Field label="Date" name="date" placeholder="Jul 2026" />
-              <Field label="Meta" name="meta" placeholder="Jul 2026 · 2 min read" />
-              <Field label="Sort order" name="sort_order" type="number" defaultValue="0" />
-              <Check label="Published" name="published" defaultChecked />
-            </div>
-            <Field label="Title" name="title" />
-            <Area label="Excerpt" name="excerpt" />
-            <Area
-              label="Body (markdown)"
-              name="body"
-              defaultValue={"Write your post in **markdown**.\n\n## A section\n\nA paragraph with a [link](https://example.com)."}
-              rows={16}
-            />
-            <Save label="Create post" />
-          </form>
-        </details>
+        <PostList
+          upsertPost={upsertPost}
+          deletePost={deletePost}
+          posts={postRows.map((post) => ({
+            slug: post.slug,
+            date: post.date,
+            title: post.title,
+            excerpt: post.excerpt,
+            meta: post.meta,
+            body: post.body_md ?? "",
+            cover_url: post.cover_url ?? null,
+            sort_order: post.sort_order,
+            published: post.published,
+          }))}
+        />
       </section>
 
       {/* SECTIONS + ENTRIES ------------------------------------------------ */}

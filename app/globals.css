@@ -727,6 +727,14 @@ button {
   margin: 0 auto;
   padding: clamp(44px, 8vw, 80px) clamp(20px, 5vw, 40px) 120px;
 }
+.article-cover {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--bord);
+  margin-bottom: 28px;
+}
 .article-meta {
   font-family: var(--font-mono);
   font-size: 12.5px;
