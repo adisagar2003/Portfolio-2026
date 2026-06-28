@@ -307,6 +307,32 @@ textarea.admin-input {
 .pe-count-warn {
   color: var(--copper-2);
 }
+.pe-outline {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid var(--bord-2);
+  border-radius: 8px;
+  padding: 6px;
+  background: var(--bg-2);
+  max-height: 220px;
+  overflow-y: auto;
+}
+.pe-outline-item {
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--txt-2);
+  font: inherit;
+  font-size: 13px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pe-outline-item:hover {
+  background: var(--card);
+  color: var(--copper-2);
+}
 .pe-find {
   display: flex;
   align-items: center;

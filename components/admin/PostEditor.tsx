@@ -44,6 +44,7 @@ export default function PostEditor({
   const formRef = useRef<HTMLFormElement>(null);
   const [full, setFull] = useState(false);
   const [help, setHelp] = useState(false);
+  const [outlineOpen, setOutlineOpen] = useState(false);
   const [findOpen, setFindOpen] = useState(false);
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
@@ -361,6 +362,35 @@ export default function PostEditor({
       e.preventDefault();
       imgs.forEach(uploadImage);
     }
+  }
+
+  // headings for the outline navigator, with their char offset in the body
+  const headings = useMemo(() => {
+    const out: { level: number; text: string; offset: number }[] = [];
+    let offset = 0;
+    let inFence = false;
+    for (const line of body.split("\n")) {
+      if (/^```/.test(line.trim())) inFence = !inFence;
+      const m = !inFence && line.match(/^(#{1,4})\s+(.*)$/);
+      if (m) out.push({ level: m[1].length, text: m[2].trim(), offset });
+      offset += line.length + 1; // +1 for the newline
+    }
+    return out;
+  }, [body]);
+
+  function jumpTo(offset: number) {
+    const el = taRef.current;
+    if (!el) return;
+    setView((v) => (v === "preview" ? "split" : v));
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(offset, offset);
+      // approximate scroll so the heading sits near the top
+      const before = body.slice(0, offset).split("\n").length;
+      const lineH = parseFloat(getComputedStyle(el).lineHeight) || 22;
+      el.scrollTop = Math.max(0, (before - 2) * lineH);
+    });
+    setOutlineOpen(false);
   }
 
   const findCount =
@@ -709,6 +739,12 @@ export default function PostEditor({
             </button>
           ))}
         </div>
+        <ToolBtn
+          onClick={() => setOutlineOpen((o) => !o)}
+          title="Document outline"
+        >
+          ☰
+        </ToolBtn>
         <ToolBtn onClick={() => setFindOpen((f) => !f)} title="Find & replace">
           🔍
         </ToolBtn>
@@ -722,6 +758,26 @@ export default function PostEditor({
           {full ? "✕" : "⛶"}
         </ToolBtn>
       </div>
+
+      {outlineOpen && (
+        <div className="pe-outline">
+          {headings.length === 0 ? (
+            <span className="pe-empty">No headings yet — add ## sections.</span>
+          ) : (
+            headings.map((h, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="pe-outline-item"
+                style={{ paddingLeft: 8 + (h.level - 1) * 14 }}
+                onClick={() => jumpTo(h.offset)}
+              >
+                {h.text || "(untitled)"}
+              </button>
+            ))
+          )}
+        </div>
+      )}
 
       {findOpen && (
         <div className="pe-find">
