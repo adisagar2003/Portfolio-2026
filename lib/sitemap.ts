@@ -1,0 +1,31 @@
+import { postTimestamp, type DatedPost } from "./posts";
+
+export interface SitemapUrl {
+  url: string;
+  lastModified: Date;
+}
+
+interface PostLike extends DatedPost {
+  slug: string;
+}
+
+/**
+ * Build sitemap entries: the home page plus every post's /writing/<slug> URL,
+ * with lastModified derived from the post's publish timestamp. Pure + tested.
+ */
+export function buildSitemapUrls(
+  siteUrl: string,
+  posts: PostLike[],
+  now: Date = new Date(0),
+): SitemapUrl[] {
+  const base = siteUrl.replace(/\/+$/, "");
+  const home: SitemapUrl = { url: base || "/", lastModified: now };
+  const postUrls = posts.map((p) => {
+    const ts = postTimestamp(p);
+    return {
+      url: `${base}/writing/${p.slug}`,
+      lastModified: ts > 0 ? new Date(ts) : now,
+    };
+  });
+  return [home, ...postUrls];
+}
