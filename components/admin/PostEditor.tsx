@@ -54,6 +54,7 @@ export default function PostEditor({
   const [slugTouched, setSlugTouched] = useState(!isNew && !!initial.slug);
   const [date, setDate] = useState(initial.date ?? todayDisplay());
   const [excerpt, setExcerpt] = useState(initial.excerpt ?? "");
+  const [published, setPublished] = useState(initial.published ?? true);
   const [sortOrder, setSortOrder] = useState(String(initial.sort_order ?? 0));
   const [cover, setCover] = useState(initial.cover_url ?? "");
   const [coverBusy, setCoverBusy] = useState(false);
@@ -98,7 +99,7 @@ export default function PostEditor({
       try {
         localStorage.setItem(
           draftKey,
-          JSON.stringify({ title, slug, date, excerpt, body, sortOrder }),
+          JSON.stringify({ title, slug, date, excerpt, body, sortOrder, published, cover }),
         );
         setSavedAt(new Date().toLocaleTimeString());
       } catch {
@@ -106,7 +107,7 @@ export default function PostEditor({
       }
     }, 800);
     return () => clearTimeout(t);
-  }, [draftKey, title, slug, date, excerpt, body, sortOrder]);
+  }, [draftKey, title, slug, date, excerpt, body, sortOrder, published, cover]);
 
   function restoreDraft() {
     try {
@@ -120,6 +121,8 @@ export default function PostEditor({
       if (d.excerpt != null) setExcerpt(d.excerpt);
       if (d.body != null) setBody(d.body);
       if (d.sortOrder != null) setSortOrder(d.sortOrder);
+      if (d.published != null) setPublished(d.published);
+      if (d.cover != null) setCover(d.cover);
     } catch {
       /* ignore */
     }
@@ -142,7 +145,8 @@ export default function PostEditor({
     slug !== (initial.slug ?? "") ||
     date !== (initial.date ?? todayDisplay()) ||
     sortOrder !== String(initial.sort_order ?? 0) ||
-    cover !== (initial.cover_url ?? "");
+    cover !== (initial.cover_url ?? "") ||
+    published !== (initial.published ?? true);
   const savingRef = useRef(false);
   useEffect(() => {
     const h = (e: BeforeUnloadEvent) => {
@@ -509,9 +513,10 @@ export default function PostEditor({
             <input
               type="checkbox"
               name="published"
-              defaultChecked={initial.published ?? true}
+              checked={published}
+              onChange={(e) => setPublished(e.target.checked)}
             />
-            Published
+            {published ? "Published" : "Draft"}
           </label>
           <button
             className="pe-save"
