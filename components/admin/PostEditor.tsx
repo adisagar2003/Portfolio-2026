@@ -338,6 +338,14 @@ export default function PostEditor({
     if (imgs.length) {
       e.preventDefault();
       imgs.forEach(uploadImage);
+      return;
+    }
+    // Paste a URL while text is selected -> wrap the selection as a link.
+    const el = taRef.current;
+    const pasted = e.clipboardData.getData("text/plain").trim();
+    if (el && el.selectionStart !== el.selectionEnd && isUrl(pasted)) {
+      e.preventDefault();
+      applyWrap("[", `](${pasted})`);
     }
   }
 
@@ -779,6 +787,9 @@ function todayDisplay(): string {
     day: "numeric",
     year: "numeric",
   });
+}
+function isUrl(s: string): boolean {
+  return /^https?:\/\/\S+$/i.test(s) && !/\s/.test(s);
 }
 function stamp(): string {
   return Date.now().toString(36);
