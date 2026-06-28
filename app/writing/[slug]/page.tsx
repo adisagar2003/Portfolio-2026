@@ -17,6 +17,11 @@ import { buildArticleJsonLd } from "@/lib/jsonld";
 import ReadingProgress from "@/components/ReadingProgress";
 import { ArrowLeft } from "@/components/icons";
 
+// ISR: rebuild at most every 5 min so edits made outside the app (e.g. direct
+// DB changes) still propagate. In-app saves also call revalidatePath for
+// instant updates.
+export const revalidate = 300;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
