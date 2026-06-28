@@ -11,6 +11,24 @@ export interface Heading {
  * fenced code blocks. ids match what the Markdown renderer assigns (slugify),
  * so the TOC links line up with the rendered sections.
  */
+/**
+ * Given heading positions (sorted by `top` ascending) and the current scroll
+ * offset, return the id of the section currently in view. Pure + tested.
+ */
+export function activeHeadingId(
+  positions: { id: string; top: number }[],
+  scrollY: number,
+  offset = 100,
+): string | null {
+  if (positions.length === 0) return null;
+  let active = positions[0].id;
+  for (const p of positions) {
+    if (p.top - offset <= scrollY) active = p.id;
+    else break;
+  }
+  return active;
+}
+
 export function extractHeadings(md: string): Heading[] {
   const out: Heading[] = [];
   let inFence = false;

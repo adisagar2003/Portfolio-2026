@@ -1,5 +1,24 @@
 import { describe, it, expect } from "vitest";
-import { extractHeadings } from "./toc";
+import { extractHeadings, activeHeadingId } from "./toc";
+
+describe("activeHeadingId", () => {
+  const pos = [
+    { id: "a", top: 0 },
+    { id: "b", top: 500 },
+    { id: "c", top: 1000 },
+  ];
+
+  it("returns the first heading at the top", () => {
+    expect(activeHeadingId(pos, 0)).toBe("a");
+  });
+  it("returns the section currently scrolled into", () => {
+    expect(activeHeadingId(pos, 600)).toBe("b");
+    expect(activeHeadingId(pos, 1200)).toBe("c");
+  });
+  it("returns null when there are no headings", () => {
+    expect(activeHeadingId([], 100)).toBeNull();
+  });
+});
 
 describe("extractHeadings", () => {
   it("collects h2 and h3 with slugified ids", () => {

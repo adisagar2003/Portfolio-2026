@@ -875,6 +875,10 @@ button {
 .article-toc a:hover {
   color: var(--copper-2);
 }
+.article-toc a.article-toc-active {
+  color: var(--copper);
+  font-weight: 600;
+}
 .article-more {
   display: grid;
   grid-template-columns: 1fr 1fr;
