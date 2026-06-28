@@ -307,6 +307,24 @@ textarea.admin-input {
 .pe-count-warn {
   color: var(--copper-2);
 }
+.pe-find {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--bord-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--bg-2);
+}
+.pe-find .pe-input {
+  flex: 1;
+  font-size: 13px;
+  padding: 6px 9px;
+}
+.pe-find .pe-count {
+  margin-left: 0;
+  white-space: nowrap;
+}
 .pe-help {
   font-size: 12px;
   color: var(--txt-2);

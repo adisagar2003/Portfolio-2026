@@ -44,6 +44,9 @@ export default function PostEditor({
   const formRef = useRef<HTMLFormElement>(null);
   const [full, setFull] = useState(false);
   const [help, setHelp] = useState(false);
+  const [findOpen, setFindOpen] = useState(false);
+  const [findText, setFindText] = useState("");
+  const [replaceText, setReplaceText] = useState("");
 
   const [title, setTitle] = useState(initial.title ?? "");
   const [slug, setSlug] = useState(initial.slug ?? "");
@@ -358,6 +361,13 @@ export default function PostEditor({
       e.preventDefault();
       imgs.forEach(uploadImage);
     }
+  }
+
+  const findCount =
+    findText === "" ? 0 : body.split(findText).length - 1;
+  function replaceAll() {
+    if (!findText) return;
+    setBody((prev) => prev.split(findText).join(replaceText));
   }
 
   // keep the preview scrolled to the same relative position as the editor
@@ -699,6 +709,9 @@ export default function PostEditor({
             </button>
           ))}
         </div>
+        <ToolBtn onClick={() => setFindOpen((f) => !f)} title="Find & replace">
+          🔍
+        </ToolBtn>
         <ToolBtn onClick={() => setHelp((h) => !h)} title="Markdown help">
           ?
         </ToolBtn>
@@ -709,6 +722,32 @@ export default function PostEditor({
           {full ? "✕" : "⛶"}
         </ToolBtn>
       </div>
+
+      {findOpen && (
+        <div className="pe-find">
+          <input
+            className="pe-input"
+            placeholder="Find…"
+            value={findText}
+            onChange={(e) => setFindText(e.target.value)}
+          />
+          <input
+            className="pe-input"
+            placeholder="Replace with…"
+            value={replaceText}
+            onChange={(e) => setReplaceText(e.target.value)}
+          />
+          <span className="pe-count">{findCount} match{findCount === 1 ? "" : "es"}</span>
+          <button
+            type="button"
+            className="pe-mini"
+            disabled={findCount === 0}
+            onClick={replaceAll}
+          >
+            Replace all
+          </button>
+        </div>
+      )}
 
       {help && (
         <div className="pe-help">
