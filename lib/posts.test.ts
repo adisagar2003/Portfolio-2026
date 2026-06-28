@@ -10,7 +10,33 @@ import {
   postSummary,
   isoDate,
   listExcerpt,
+  relatedPosts,
 } from "./posts";
+
+describe("relatedPosts", () => {
+  const posts = [
+    { slug: "a", title: "Building with AI in the loop" },
+    { slug: "b", title: "Keeping AI in the loop safely" },
+    { slug: "c", title: "ERP plumbing systems" },
+    { slug: "d", title: "Notes on the build loop" },
+  ];
+
+  it("returns posts sharing significant title words, best first", () => {
+    const r = relatedPosts(posts, "a", 2).map((p) => p.slug);
+    // b shares "loop", d shares "loop" (and "build"? no, 'building' vs 'build')
+    expect(r).toContain("b");
+    expect(r).not.toContain("c");
+    expect(r.length).toBeLessThanOrEqual(2);
+  });
+
+  it("excludes the current post and returns [] when none match", () => {
+    expect(relatedPosts(posts, "c", 2)).toEqual([]);
+  });
+
+  it("returns [] for an unknown slug", () => {
+    expect(relatedPosts(posts, "zzz", 2)).toEqual([]);
+  });
+});
 
 describe("listExcerpt", () => {
   it("uses the authored excerpt when present", () => {

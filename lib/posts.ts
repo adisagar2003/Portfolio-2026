@@ -32,6 +32,39 @@ export function postTimestamp(p: DatedPost): number {
   return 0;
 }
 
+function significantWords(s: string): Set<string> {
+  const words = (s.toLowerCase().match(/[a-z0-9]+/g) || []).filter(
+    (w) => w.length >= 4,
+  );
+  return new Set(words);
+}
+
+/**
+ * Posts related to `slug` by shared significant title words, best match first.
+ * Returns at most `n`, excludes the current post and zero-overlap posts.
+ */
+export function relatedPosts<T extends { slug: string; title: string }>(
+  posts: T[],
+  slug: string,
+  n = 2,
+): T[] {
+  const current = posts.find((p) => p.slug === slug);
+  if (!current) return [];
+  const base = significantWords(current.title);
+  return posts
+    .filter((p) => p.slug !== slug)
+    .map((p) => {
+      const words = significantWords(p.title);
+      let score = 0;
+      for (const w of words) if (base.has(w)) score++;
+      return { p, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, n)
+    .map((x) => x.p);
+}
+
 export interface PostSummary {
   slug: string;
   title: string;

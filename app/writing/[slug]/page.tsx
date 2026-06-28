@@ -9,6 +9,7 @@ import {
   adjacentPosts,
   displayDateFor,
   isoDate,
+  relatedPosts,
 } from "@/lib/posts";
 import { readTime } from "@/lib/post-utils";
 import { extractHeadings } from "@/lib/toc";
@@ -69,6 +70,7 @@ export default async function WritingPage({ params }: Props) {
   const { profile, site, posts } = await getContent();
   const { newer, older } = adjacentPosts(posts, slug);
   const toc = extractHeadings(post.body);
+  const related = relatedPosts(posts, slug, 2);
   const jsonLd = buildArticleJsonLd({
     post,
     siteUrl: site.url,
@@ -124,6 +126,19 @@ export default async function WritingPage({ params }: Props) {
           <div className="article-md">
             <Markdown body={post.body} />
           </div>
+
+          {related.length > 0 && (
+            <section className="article-related">
+              <div className="article-related-label">Related</div>
+              <ul>
+                {related.map((r) => (
+                  <li key={r.slug}>
+                    <Link href={`/writing/${r.slug}`}>{r.title}</Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {(newer || older) && (
             <nav className="article-more">
