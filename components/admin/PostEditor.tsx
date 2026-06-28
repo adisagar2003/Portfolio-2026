@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { useFormStatus } from "react-dom";
 import Markdown from "@/components/Markdown";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -546,10 +547,10 @@ export default function PostEditor({
             />
             {published ? "Published" : "Draft"}
           </label>
-          <button
-            className="pe-save"
-            type="submit"
+          <SaveButton
+            label={isNew ? "Create post" : "Save"}
             disabled={blocked}
+            dirty={dirty}
             title={
               !slug.trim()
                 ? "Add a slug first"
@@ -557,13 +558,10 @@ export default function PostEditor({
                   ? "That slug is already used by another post"
                   : ""
             }
-            onClick={() => {
+            onPress={() => {
               savingRef.current = true; // suppress unsaved-changes prompt
             }}
-          >
-            {isNew ? "Create post" : "Save"}
-            {dirty ? " •" : ""}
-          </button>
+          />
         </div>
       </div>
 
@@ -949,6 +947,34 @@ export default function PostEditor({
         </div>
       )}
     </form>
+  );
+}
+
+function SaveButton({
+  label,
+  disabled,
+  dirty,
+  title,
+  onPress,
+}: {
+  label: string;
+  disabled: boolean;
+  dirty: boolean;
+  title: string;
+  onPress: () => void;
+}) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      className="pe-save"
+      type="submit"
+      disabled={disabled || pending}
+      title={title}
+      onClick={onPress}
+    >
+      {pending ? "Saving…" : label}
+      {!pending && dirty ? " •" : ""}
+    </button>
   );
 }
 
