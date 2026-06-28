@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
 import { displayDateFor, isoDate } from "@/lib/posts";
+import { readTime } from "@/lib/post-utils";
 import { ArrowUpRight } from "@/components/icons";
 
 export default function Writing({
@@ -23,9 +24,12 @@ export default function Writing({
             href={`/writing/${post.slug}`}
             className="post-btn"
           >
-            <time className="post-date" dateTime={isoDate(post) || undefined}>
-              {displayDateFor(post) || post.date}
-            </time>
+            <span className="post-date">
+              <time dateTime={isoDate(post) || undefined}>
+                {displayDateFor(post) || post.date}
+              </time>
+              <span className="post-readtime">{readTime(post.body)} min</span>
+            </span>
             <span>
               <span className="post-title">{post.title}</span>
               <span className="post-excerpt">{post.excerpt}</span>
