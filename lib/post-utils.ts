@@ -10,6 +10,15 @@ export function slugify(input: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** Return `base` if free, else the first `base-2`, `base-3`, … not in `taken`. */
+export function uniqueSlug(base: string, taken: string[]): string {
+  const set = new Set(taken);
+  if (!set.has(base)) return base;
+  let n = 2;
+  while (set.has(`${base}-${n}`)) n++;
+  return `${base}-${n}`;
+}
+
 /** Word count of markdown body (strips syntax noise roughly). */
 export function wordCount(md: string): number {
   const text = md

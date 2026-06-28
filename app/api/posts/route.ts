@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/service";
-import { slugify, buildMeta, autoExcerpt } from "@/lib/post-utils";
+import { slugify, buildMeta, autoExcerpt, uniqueSlug } from "@/lib/post-utils";
 
 export const dynamic = "force-dynamic";
 
@@ -91,9 +91,15 @@ export async function POST(req: NextRequest) {
       .eq("slug", slug)
       .maybeSingle();
     if (existing) {
-      return bad(
-        409,
-        `A post with slug "${slug}" already exists. Pass "overwrite": true or a different slug.`,
+      const { data: all } = await supabase.from("posts").select("slug");
+      const suggestion = uniqueSlug(slug, (all ?? []).map((r) => r.slug));
+      return NextResponse.json(
+        {
+          error: `A post with slug "${slug}" already exists. Pass "overwrite": true, or retry with the suggested slug.`,
+          slug,
+          suggestion,
+        },
+        { status: 409 },
       );
     }
   }

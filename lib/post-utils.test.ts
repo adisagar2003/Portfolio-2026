@@ -6,6 +6,7 @@ import {
   autoExcerpt,
   isExternalHref,
   flattenText,
+  uniqueSlug,
 } from "./post-utils";
 
 describe("flattenText", () => {
@@ -53,6 +54,20 @@ describe("slugify", () => {
   it("never contains spaces or uppercase", () => {
     const s = slugify("A Mixed CASE Title 123");
     expect(s).not.toMatch(/[A-Z\s]/);
+  });
+});
+
+describe("uniqueSlug", () => {
+  it("returns the base when it is free", () => {
+    expect(uniqueSlug("my-post", ["other"])).toBe("my-post");
+  });
+  it("appends -2 on first collision", () => {
+    expect(uniqueSlug("my-post", ["my-post"])).toBe("my-post-2");
+  });
+  it("finds the next free numeric suffix", () => {
+    expect(uniqueSlug("my-post", ["my-post", "my-post-2", "my-post-3"])).toBe(
+      "my-post-4",
+    );
   });
 });
 
