@@ -727,6 +727,69 @@ button {
   margin: 0 auto;
   padding: clamp(44px, 8vw, 80px) clamp(20px, 5vw, 40px) 120px;
 }
+.notfound {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: clamp(80px, 18vh, 200px) clamp(20px, 5vw, 40px) 120px;
+}
+.notfound-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+.notfound-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 40px);
+  color: var(--silver);
+  margin: 18px 0 10px;
+  letter-spacing: -0.02em;
+}
+.notfound-text {
+  color: var(--txt-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+.notfound-home {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--copper-2);
+  text-decoration: none;
+}
+.notfound-home:hover {
+  color: var(--copper);
+}
+.notfound-recent {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--bord);
+}
+.notfound-recent-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--txt-3);
+  margin-bottom: 12px;
+}
+.notfound-post {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: var(--txt-2);
+  border-bottom: 1px solid var(--bord);
+  transition: color 0.18s;
+}
+.notfound-post:hover {
+  color: var(--copper-2);
+}
+.notfound-post-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--txt-3);
+  white-space: nowrap;
+}
 .reading-progress {
   position: fixed;
   top: 0;
