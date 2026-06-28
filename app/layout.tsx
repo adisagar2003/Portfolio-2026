@@ -62,12 +62,21 @@ export default function RootLayout({
       data-theme="dark"
       className={`${sora.variable} ${hanken.variable} ${jetbrains.variable}`}
     >
-      {supabaseOrigin ? (
-        <head>
-          <link rel="preconnect" href={supabaseOrigin} crossOrigin="" />
-          <link rel="dns-prefetch" href={supabaseOrigin} />
-        </head>
-      ) : null}
+      <head>
+        {/* Apply the saved theme before paint to avoid a flash (dark-first). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}",
+          }}
+        />
+        {supabaseOrigin ? (
+          <>
+            <link rel="preconnect" href={supabaseOrigin} crossOrigin="" />
+            <link rel="dns-prefetch" href={supabaseOrigin} />
+          </>
+        ) : null}
+      </head>
       <body>
         <a href="#top" className="skip-link">
           Skip to content

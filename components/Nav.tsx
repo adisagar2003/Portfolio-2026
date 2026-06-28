@@ -18,6 +18,11 @@ export default function Nav({ initials }: { initials: string }) {
     const next: Theme = theme === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     setTheme(next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      /* ignore */
+    }
   }
 
   return (
