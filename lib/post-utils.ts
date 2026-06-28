@@ -36,6 +36,13 @@ export function readTime(md: string): number {
   return Math.max(1, Math.ceil(wordCount(md) / 200));
 }
 
+/** Trim `s` to at most `max` chars at a word boundary, adding … when cut. */
+export function clampText(s: string, max: number): string {
+  const t = s.trim();
+  if (t.length <= max) return t;
+  return t.slice(0, max).replace(/\s+\S*$/, "").trimEnd() + "…";
+}
+
 /** Flatten React-ish children (string | array | {props.children}) to plain text. */
 export function flattenText(node: unknown): string {
   if (node == null || typeof node === "boolean") return "";

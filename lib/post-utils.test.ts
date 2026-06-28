@@ -7,7 +7,23 @@ import {
   isExternalHref,
   flattenText,
   uniqueSlug,
+  clampText,
 } from "./post-utils";
+
+describe("clampText", () => {
+  it("leaves short text unchanged", () => {
+    expect(clampText("hello world", 50)).toBe("hello world");
+  });
+  it("truncates at a word boundary with an ellipsis", () => {
+    const out = clampText("the quick brown fox jumps", 12);
+    expect(out.endsWith("…")).toBe(true);
+    expect(out.length).toBeLessThanOrEqual(13);
+    expect(out).not.toContain("jum");
+  });
+  it("trims surrounding whitespace", () => {
+    expect(clampText("   padded   ", 50)).toBe("padded");
+  });
+});
 
 describe("flattenText", () => {
   it("returns plain strings as-is", () => {

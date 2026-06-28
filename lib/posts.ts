@@ -1,7 +1,7 @@
 // Pure helpers for ordering and displaying posts by their publish date.
 // Kept UTC-based so behaviour is deterministic everywhere (server, client, tests).
 
-import { readTime, autoExcerpt } from "./post-utils";
+import { readTime, autoExcerpt, clampText } from "./post-utils";
 
 export interface DatedPost {
   /** real publish timestamp (ISO) — the reliable sort key */
@@ -76,10 +76,9 @@ export function metaDescription(
   fallback = "",
 ): string {
   const ex = (p.excerpt ?? "").trim();
-  if (ex) return ex;
-  const auto = autoExcerpt(p.body ?? "");
-  if (auto) return auto;
-  return fallback;
+  const chosen = ex || autoExcerpt(p.body ?? "") || fallback;
+  // Cap for clean search snippets / social cards (~200 chars).
+  return clampText(chosen, 200);
 }
 
 /** Newest-first, without mutating the input. */
