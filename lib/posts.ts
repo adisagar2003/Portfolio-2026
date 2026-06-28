@@ -3,6 +3,15 @@
 
 import { readTime, autoExcerpt, clampText } from "./post-utils";
 
+/** Excerpt for list cards: the authored excerpt, else an auto one from body. */
+export function listExcerpt(
+  p: { excerpt?: string; body?: string },
+  max = 160,
+): string {
+  const ex = (p.excerpt ?? "").trim();
+  return ex || clampText(autoExcerpt(p.body ?? ""), max);
+}
+
 export interface DatedPost {
   /** real publish timestamp (ISO) — the reliable sort key */
   createdAt?: string;

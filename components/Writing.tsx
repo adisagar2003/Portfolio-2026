@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
-import { displayDateFor, isoDate } from "@/lib/posts";
+import { displayDateFor, isoDate, listExcerpt } from "@/lib/posts";
 import { readTime } from "@/lib/post-utils";
 import { ArrowUpRight } from "@/components/icons";
 
@@ -32,7 +32,7 @@ export default function Writing({
             </span>
             <span>
               <span className="post-title">{post.title}</span>
-              <span className="post-excerpt">{post.excerpt}</span>
+              <span className="post-excerpt">{listExcerpt(post)}</span>
             </span>
             <span className="post-arrow">
               <ArrowUpRight />

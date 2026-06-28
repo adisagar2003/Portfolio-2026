@@ -9,7 +9,24 @@ import {
   adjacentPosts,
   postSummary,
   isoDate,
+  listExcerpt,
 } from "./posts";
+
+describe("listExcerpt", () => {
+  it("uses the authored excerpt when present", () => {
+    expect(listExcerpt({ excerpt: "Authored", body: "# x\n\nbody" })).toBe(
+      "Authored",
+    );
+  });
+  it("falls back to an auto-excerpt from the body", () => {
+    expect(listExcerpt({ excerpt: "  ", body: "# Title\n\nReal body text." })).toContain(
+      "Real body text",
+    );
+  });
+  it("returns empty string when there is nothing", () => {
+    expect(listExcerpt({ excerpt: "", body: "" })).toBe("");
+  });
+});
 
 describe("isoDate", () => {
   it("returns YYYY-MM-DD from the publish date", () => {
