@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { leadingBlanks, contributionTotal } from "@/lib/contrib";
 
 interface Cell {
   bg: string;
@@ -118,8 +119,7 @@ export default function ContributionGrid({
         if (cancelled) return;
 
         const next: Cell[] = [];
-        const first = new Date(days[0].date);
-        const offset = first.getDay();
+        const offset = leadingBlanks(days[0].date);
         for (let i = 0; i < offset; i++)
           next.push({ bg: "transparent", title: "" });
         for (const day of days) {
@@ -131,13 +131,7 @@ export default function ContributionGrid({
               : `No contributions on ${fmt(new Date(day.date))}`,
           });
         }
-        let sum = 0;
-        if (data.total)
-          sum =
-            data.total.lastYear != null
-              ? data.total.lastYear
-              : Object.values(data.total)[0];
-        if (!sum) sum = days.reduce((a, b) => a + (b.count || 0), 0);
+        const sum = contributionTotal(data.total, days);
 
         setCells(next);
         setTotal(Number(sum).toLocaleString());
