@@ -1,4 +1,5 @@
 import { postTimestamp, metaDescription, type DatedPost } from "./posts";
+import { siteBase, postUrl } from "./url";
 
 interface SiteInput {
   siteUrl: string;
@@ -19,7 +20,7 @@ export function buildSiteJsonLd({
   role,
   socials = [],
 }: SiteInput): Record<string, unknown> {
-  const base = siteUrl.replace(/\/+$/, "");
+  const base = siteBase(siteUrl);
   const sameAs = socials.map((s) => s.href).filter(Boolean);
   const person: Record<string, unknown> = {
     "@type": "Person",
@@ -63,8 +64,7 @@ export function buildArticleJsonLd({
   siteDescription,
   authorName,
 }: ArticleInput): Record<string, unknown> {
-  const base = siteUrl.replace(/\/+$/, "");
-  const url = `${base}/writing/${post.slug}`;
+  const url = postUrl(siteUrl, post.slug);
   const ts = postTimestamp(post);
 
   const data: Record<string, unknown> = {

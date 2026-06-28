@@ -1,4 +1,5 @@
 import { postTimestamp, type DatedPost } from "./posts";
+import { siteBase, postUrl } from "./url";
 
 export interface SitemapUrl {
   url: string;
@@ -18,12 +19,12 @@ export function buildSitemapUrls(
   posts: PostLike[],
   now: Date = new Date(0),
 ): SitemapUrl[] {
-  const base = siteUrl.replace(/\/+$/, "");
+  const base = siteBase(siteUrl);
   const home: SitemapUrl = { url: base || "/", lastModified: now };
   const postUrls = posts.map((p) => {
     const ts = postTimestamp(p);
     return {
-      url: `${base}/writing/${p.slug}`,
+      url: postUrl(siteUrl, p.slug),
       lastModified: ts > 0 ? new Date(ts) : now,
     };
   });

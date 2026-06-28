@@ -1,4 +1,5 @@
 import { postTimestamp, metaDescription, type DatedPost } from "./posts";
+import { siteBase, postUrl } from "./url";
 
 export function escapeXml(s: string): string {
   return s
@@ -30,12 +31,12 @@ export function buildRssXml({
   siteDescription,
   posts,
 }: RssInput): string {
-  const base = siteUrl.replace(/\/+$/, "");
+  const base = siteBase(siteUrl);
   const newest = posts.reduce((max, p) => Math.max(max, postTimestamp(p)), 0);
   const lastBuild = newest > 0 ? new Date(newest).toUTCString() : "";
   const items = posts
     .map((p) => {
-      const link = `${base}/writing/${p.slug}`;
+      const link = postUrl(siteUrl, p.slug);
       const ts = postTimestamp(p);
       const pubDate = ts > 0 ? new Date(ts).toUTCString() : "";
       const desc = metaDescription(p, siteDescription);
