@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Profile } from "@/lib/types";
 import SocialLinks from "@/components/SocialLinks";
 
@@ -6,12 +7,14 @@ export default function Hero({ profile }: { profile: Profile }) {
     <div className="hero">
       <div className="hero-avatar-wrap">
         <div className="hero-avatar-glow" aria-hidden="true" />
-        {/* plain <img>: GitHub avatar, no Next image optimization needed */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* Above-the-fold LCP image: optimized + priority (preloaded). */}
+        <Image
           src={profile.avatarUrl}
           alt={profile.name}
-          loading="lazy"
+          width={152}
+          height={152}
+          priority
+          sizes="152px"
           className="hero-avatar"
         />
       </div>
