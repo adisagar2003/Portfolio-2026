@@ -40,6 +40,7 @@ export default function PostEditor({
   takenSlugs?: string[];
 }) {
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [full, setFull] = useState(false);
   const [help, setHelp] = useState(false);
@@ -357,6 +358,18 @@ export default function PostEditor({
       e.preventDefault();
       imgs.forEach(uploadImage);
     }
+  }
+
+  // keep the preview scrolled to the same relative position as the editor
+  function syncScroll(e: React.UIEvent<HTMLTextAreaElement>) {
+    if (view !== "split") return;
+    const ta = e.currentTarget;
+    const pv = previewRef.current;
+    if (!pv) return;
+    const max = ta.scrollHeight - ta.clientHeight;
+    if (max <= 0) return;
+    const ratio = ta.scrollTop / max;
+    pv.scrollTop = ratio * (pv.scrollHeight - pv.clientHeight);
   }
 
   // ---- keyboard shortcuts --------------------------------------------------
@@ -720,6 +733,7 @@ export default function PostEditor({
             onKeyDown={onKeyDown}
             onPaste={onPaste}
             onDrop={onDrop}
+            onScroll={syncScroll}
             placeholder={
               "Write in markdown. Drag, paste, or upload images — they go straight to storage.\n\n## A heading\n\nA paragraph with a [link](https://example.com)."
             }
@@ -727,7 +741,7 @@ export default function PostEditor({
           />
         )}
         {view !== "write" && (
-          <div className="pe-preview article-md">
+          <div ref={previewRef} className="pe-preview article-md">
             {body.trim() ? (
               <Markdown body={body} />
             ) : (
