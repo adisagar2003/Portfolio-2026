@@ -160,12 +160,22 @@ curl -X POST https://<your-domain>/api/posts \
 - **Optional:** `cover_url`, `published` (default `true`), `sort_order`,
   `overwrite` (default `false`).
 - **Responses:** `201` created (`{ ok, slug, url, post }`) · `401` bad/missing
-  key · `400` missing title/body · `409` slug already exists (pass
-  `"overwrite": true` to replace) · `500` server not configured.
+  key · `400` invalid input (non-string/empty `title`/`body`) · `409` slug
+  already exists — the body includes a free `suggestion` (e.g. `my-post-2`);
+  pass `"overwrite": true` to replace instead · `500` server not configured.
 
-The handler (`app/api/posts/route.ts`) does a timing-safe key check and
-revalidates `/` and `/writing/[slug]` so new posts appear immediately. The
-`x-api-key: <key>` header works as an alternative to `Authorization: Bearer`.
+### Other methods (same auth)
+
+- **`GET /api/posts`** — list every post (incl. drafts):
+  `{ count, posts: [{ slug, title, published, url, date }] }`. Use it to check
+  what exists before writing.
+- **`DELETE /api/posts`** — remove a post: body `{ "slug": "..." }`. Returns
+  `{ ok, deleted }`, or `404` if the slug doesn't exist.
+
+All three methods use a timing-safe key check, accept either
+`Authorization: Bearer <key>` or `x-api-key: <key>`, and revalidate `/` and
+`/writing/[slug]` so changes appear immediately. Input is validated/normalized
+by `lib/api-posts.ts` (covered by Vitest).
 
 ## Deploy
 
