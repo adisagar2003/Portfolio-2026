@@ -85,6 +85,7 @@ export default function PostEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // image library
@@ -383,6 +384,7 @@ export default function PostEditor({
   }
 
   function onDrop(e: React.DragEvent<HTMLTextAreaElement>) {
+    setDragOver(false);
     const imgs = Array.from(e.dataTransfer.files).filter((f) =>
       f.type.startsWith("image/"),
     );
@@ -390,6 +392,15 @@ export default function PostEditor({
       e.preventDefault();
       imgs.forEach(uploadImage);
     }
+  }
+  function onDragOver(e: React.DragEvent<HTMLTextAreaElement>) {
+    if (Array.from(e.dataTransfer.items).some((it) => it.kind === "file")) {
+      e.preventDefault();
+      if (!dragOver) setDragOver(true);
+    }
+  }
+  function onDragLeave() {
+    if (dragOver) setDragOver(false);
   }
 
   // headings for the outline navigator, with their char offset in the body
@@ -859,21 +870,26 @@ export default function PostEditor({
       {/* editor + preview */}
       <div className={"pe-pane pe-pane-" + view}>
         {view !== "preview" && (
-          <textarea
-            ref={taRef}
-            className="pe-body"
-            name="body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            onKeyDown={onKeyDown}
-            onPaste={onPaste}
-            onDrop={onDrop}
-            onScroll={syncScroll}
-            placeholder={
-              "Write in markdown. Drag, paste, or upload images — they go straight to storage.\n\n## A heading\n\nA paragraph with a [link](https://example.com)."
-            }
-            spellCheck
-          />
+          <div className={"pe-bodywrap" + (dragOver ? " pe-dragover" : "")}>
+            <textarea
+              ref={taRef}
+              className="pe-body"
+              name="body"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              onKeyDown={onKeyDown}
+              onPaste={onPaste}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onScroll={syncScroll}
+              placeholder={
+                "Write in markdown. Drag, paste, or upload images — they go straight to storage.\n\n## A heading\n\nA paragraph with a [link](https://example.com)."
+              }
+              spellCheck
+            />
+            {dragOver && <div className="pe-drop">Drop image to upload</div>}
+          </div>
         )}
         {view !== "write" && (
           <div ref={previewRef} className="pe-preview article-md">
