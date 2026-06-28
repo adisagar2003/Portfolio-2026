@@ -5,7 +5,28 @@ import {
   formatPostDate,
   displayDateFor,
   articleMeta,
+  metaDescription,
 } from "./posts";
+
+describe("metaDescription", () => {
+  it("uses the authored excerpt when present", () => {
+    expect(metaDescription({ excerpt: "My summary", body: "x" }, "site")).toBe(
+      "My summary",
+    );
+  });
+
+  it("falls back to an auto-excerpt from the body", () => {
+    expect(
+      metaDescription({ excerpt: "  ", body: "# Title\n\nReal content here." }, "site"),
+    ).toContain("Real content here");
+  });
+
+  it("falls back to the site description when nothing else exists", () => {
+    expect(metaDescription({ excerpt: "", body: "" }, "site desc")).toBe(
+      "site desc",
+    );
+  });
+});
 
 describe("postTimestamp", () => {
   it("prefers the authored display date (the intended publish date)", () => {

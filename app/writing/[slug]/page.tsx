@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Markdown from "@/components/Markdown";
 import { getPost, getContent } from "@/lib/content";
-import { articleMeta } from "@/lib/posts";
+import { articleMeta, metaDescription } from "@/lib/posts";
 import { ArrowLeft } from "@/components/icons";
 
 interface Props {
@@ -21,14 +21,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const { site } = await getContent();
+  const description = metaDescription(post, site.description);
 
   return {
     metadataBase: new URL(site.url),
     title: `${post.title} — ${site.title}`,
-    description: post.excerpt,
+    description,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description,
       url: `${site.url}/writing/${post.slug}`,
       type: "article",
       publishedTime: post.date,
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description,
       images: post.coverUrl ? [post.coverUrl] : undefined,
     },
   };

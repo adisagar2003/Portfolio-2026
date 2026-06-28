@@ -1,7 +1,7 @@
 // Pure helpers for ordering and displaying posts by their publish date.
 // Kept UTC-based so behaviour is deterministic everywhere (server, client, tests).
 
-import { readTime } from "./post-utils";
+import { readTime, autoExcerpt } from "./post-utils";
 
 export interface DatedPost {
   /** real publish timestamp (ISO) — the reliable sort key */
@@ -38,6 +38,21 @@ export function articleMeta(p: DatedPost & { body?: string }): string {
   const mins = readTime(p.body ?? "");
   const read = `${mins} min read`;
   return date ? `${date} · ${read}` : read;
+}
+
+/**
+ * SEO/social description for a post: the authored excerpt, else an auto-excerpt
+ * from the body, else the site-wide fallback. Never empty (good for OG/Twitter).
+ */
+export function metaDescription(
+  p: { excerpt?: string; body?: string },
+  fallback = "",
+): string {
+  const ex = (p.excerpt ?? "").trim();
+  if (ex) return ex;
+  const auto = autoExcerpt(p.body ?? "");
+  if (auto) return auto;
+  return fallback;
 }
 
 /** Newest-first, without mutating the input. */
