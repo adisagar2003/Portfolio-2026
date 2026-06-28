@@ -1,5 +1,39 @@
 import { describe, it, expect } from "vitest";
-import { buildArticleJsonLd } from "./jsonld";
+import { buildArticleJsonLd, buildSiteJsonLd } from "./jsonld";
+
+describe("buildSiteJsonLd", () => {
+  it("emits a WebSite and Person graph with sameAs socials", () => {
+    const d = buildSiteJsonLd({
+      siteUrl: "https://site.com/",
+      siteName: "Site",
+      authorName: "Aditya",
+      role: "Engineer",
+      socials: [{ href: "https://github.com/x" }, { href: "https://linkedin.com/y" }],
+    });
+    const graph = d["@graph"] as Array<Record<string, unknown>>;
+    expect(graph[0]).toMatchObject({ "@type": "WebSite", url: "https://site.com" });
+    expect(graph[1]).toMatchObject({
+      "@type": "Person",
+      name: "Aditya",
+      jobTitle: "Engineer",
+    });
+    expect(graph[1].sameAs).toEqual([
+      "https://github.com/x",
+      "https://linkedin.com/y",
+    ]);
+  });
+
+  it("omits jobTitle and sameAs when absent", () => {
+    const d = buildSiteJsonLd({
+      siteUrl: "https://site.com",
+      siteName: "Site",
+      authorName: "A",
+    });
+    const person = (d["@graph"] as Array<Record<string, unknown>>)[1];
+    expect(person.jobTitle).toBeUndefined();
+    expect(person.sameAs).toBeUndefined();
+  });
+});
 
 const base = {
   siteUrl: "https://site.com/",

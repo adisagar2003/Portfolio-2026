@@ -8,6 +8,7 @@ import ContributionGrid from "@/components/ContributionGrid";
 import TimelineSection from "@/components/TimelineSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { buildSiteJsonLd } from "@/lib/jsonld";
 
 // Cached and rebuilt at most every 5 min; admin saves and the posts API call
 // revalidatePath("/") so edits still appear immediately without paying the
@@ -19,9 +20,20 @@ export const metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const { site, profile, posts, sections, contact } = await getContent();
+  const jsonLd = buildSiteJsonLd({
+    siteUrl: site.url,
+    siteName: site.title,
+    authorName: profile.name,
+    role: profile.role,
+    socials: profile.socials,
+  });
 
   return (
     <div className="root" id="top">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ShaderBackground />
       <div className="scrim" aria-hidden="true" />
 

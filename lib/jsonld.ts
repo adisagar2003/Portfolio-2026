@@ -1,5 +1,43 @@
 import { postTimestamp, metaDescription, type DatedPost } from "./posts";
 
+interface SiteInput {
+  siteUrl: string;
+  siteName: string;
+  authorName: string;
+  role?: string;
+  socials?: { href: string }[];
+}
+
+/**
+ * Build schema.org JSON-LD for the homepage: a WebSite plus the author Person
+ * (with social profiles as sameAs). Pure + tested.
+ */
+export function buildSiteJsonLd({
+  siteUrl,
+  siteName,
+  authorName,
+  role,
+  socials = [],
+}: SiteInput): Record<string, unknown> {
+  const base = siteUrl.replace(/\/+$/, "");
+  const sameAs = socials.map((s) => s.href).filter(Boolean);
+  const person: Record<string, unknown> = {
+    "@type": "Person",
+    name: authorName,
+    url: base,
+  };
+  if (role) person.jobTitle = role;
+  if (sameAs.length) person.sameAs = sameAs;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", name: siteName, url: base },
+      person,
+    ],
+  };
+}
+
 interface ArticleInput {
   post: DatedPost & {
     slug: string;
