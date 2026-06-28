@@ -22,9 +22,18 @@ describe("buildRssXml", () => {
   it("produces a valid RSS shell with channel metadata", () => {
     const xml = buildRssXml(input);
     expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
-    expect(xml).toContain("<rss version=\"2.0\">");
+    expect(xml).toContain('xmlns:atom="http://www.w3.org/2005/Atom"');
     expect(xml).toContain("<title>My Site</title>");
     expect(xml).toContain("<link>https://site.com</link>");
+  });
+
+  it("includes feed-validity elements (atom self, language, lastBuildDate)", () => {
+    const xml = buildRssXml(input);
+    expect(xml).toContain(
+      '<atom:link href="https://site.com/feed.xml" rel="self" type="application/rss+xml" />',
+    );
+    expect(xml).toContain("<language>en</language>");
+    expect(xml).toContain("<lastBuildDate>");
   });
 
   it("renders an escaped item with a permalink and pubDate", () => {

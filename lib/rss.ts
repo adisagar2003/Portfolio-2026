@@ -31,6 +31,8 @@ export function buildRssXml({
   posts,
 }: RssInput): string {
   const base = siteUrl.replace(/\/+$/, "");
+  const newest = posts.reduce((max, p) => Math.max(max, postTimestamp(p)), 0);
+  const lastBuild = newest > 0 ? new Date(newest).toUTCString() : "";
   const items = posts
     .map((p) => {
       const link = `${base}/writing/${p.slug}`;
@@ -52,11 +54,13 @@ export function buildRssXml({
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(siteName)}</title>
     <link>${escapeXml(base)}</link>
+    <atom:link href="${escapeXml(base)}/feed.xml" rel="self" type="application/rss+xml" />
     <description>${escapeXml(siteDescription)}</description>
+    <language>en</language>${lastBuild ? `\n    <lastBuildDate>${lastBuild}</lastBuildDate>` : ""}
 ${items}
   </channel>
 </rss>`;
