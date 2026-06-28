@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import Markdown from "@/components/Markdown";
 import { createClient } from "@/lib/supabase/client";
 import { imageFileError } from "@/lib/upload";
+import { lintPostBody } from "@/lib/lint";
 import {
   slugify,
   buildMeta,
@@ -542,6 +543,7 @@ export default function PostEditor({
   }
 
   const words = wordCount(body);
+  const lintWarnings = lintPostBody(body);
 
   return (
     <form ref={formRef} action={action} className={full ? "pe pe-full" : "pe"}>
@@ -927,6 +929,14 @@ export default function PostEditor({
           <span style={{ color: "#e57368" }}> · {uploadError}</span>
         ) : null}
       </div>
+
+      {lintWarnings.length > 0 && (
+        <ul className="pe-lint">
+          {lintWarnings.map((w) => (
+            <li key={w}>⚠ {w}</li>
+          ))}
+        </ul>
+      )}
 
       {/* image library modal */}
       {libOpen && (
