@@ -38,6 +38,11 @@ export function readTime(md: string): number {
   return Math.max(1, Math.ceil(wordCount(md) / 200));
 }
 
+/** True when a length falls outside [min, max] — for SEO field hints. */
+export function isLenWarn(len: number, min: number, max: number): boolean {
+  return len > 0 && (len < min || len > max);
+}
+
 /** Trim `s` to at most `max` chars at a word boundary, adding … when cut. */
 export function clampText(s: string, max: number): string {
   const t = s.trim();

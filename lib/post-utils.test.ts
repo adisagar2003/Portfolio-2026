@@ -8,7 +8,19 @@ import {
   flattenText,
   uniqueSlug,
   clampText,
+  isLenWarn,
 } from "./post-utils";
+
+describe("isLenWarn", () => {
+  it("warns below min and above max, not within range", () => {
+    expect(isLenWarn(3, 5, 60)).toBe(true);
+    expect(isLenWarn(80, 5, 60)).toBe(true);
+    expect(isLenWarn(30, 5, 60)).toBe(false);
+  });
+  it("does not warn on empty (length 0)", () => {
+    expect(isLenWarn(0, 5, 60)).toBe(false);
+  });
+});
 
 describe("clampText", () => {
   it("leaves short text unchanged", () => {

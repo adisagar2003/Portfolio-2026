@@ -11,6 +11,7 @@ import {
   autoExcerpt,
   readTime,
   wordCount,
+  isLenWarn,
 } from "@/lib/post-utils";
 
 export interface PostInitial {
@@ -589,6 +590,12 @@ export default function PostEditor({
         </div>
       </div>
 
+      {title.length > 60 && (
+        <div className="pe-count pe-count-warn" style={{ marginTop: -4 }}>
+          Title is {title.length} chars — search engines truncate around 60.
+        </div>
+      )}
+
       {/* unsaved-draft restore banner */}
       {restored === "available" && (
         <div className="pe-restore">
@@ -706,10 +713,7 @@ export default function PostEditor({
           </button>
           <span
             className={
-              "pe-count" +
-              (excerpt.length > 0 && (excerpt.length < 50 || excerpt.length > 160)
-                ? " pe-count-warn"
-                : "")
+              "pe-count" + (isLenWarn(excerpt.length, 50, 160) ? " pe-count-warn" : "")
             }
           >
             {excerpt.length}/160
