@@ -1,5 +1,23 @@
 import { describe, it, expect } from "vitest";
-import { slugify, readTime, buildMeta, autoExcerpt } from "./post-utils";
+import {
+  slugify,
+  readTime,
+  buildMeta,
+  autoExcerpt,
+  isExternalHref,
+} from "./post-utils";
+
+describe("isExternalHref", () => {
+  it("treats absolute http(s) URLs as external", () => {
+    expect(isExternalHref("https://example.com")).toBe(true);
+    expect(isExternalHref("http://example.com/x")).toBe(true);
+  });
+  it("treats internal/anchor/mailto links as not external", () => {
+    expect(isExternalHref("/writing/post")).toBe(false);
+    expect(isExternalHref("#top")).toBe(false);
+    expect(isExternalHref("mailto:a@b.com")).toBe(false);
+  });
+});
 
 describe("slugify", () => {
   it("makes a URL-safe slug from a title with spaces and capitals", () => {

@@ -27,6 +27,11 @@ export function readTime(md: string): number {
   return Math.max(1, Math.ceil(wordCount(md) / 200));
 }
 
+/** True for absolute http(s) links — those should open in a new, safe tab. */
+export function isExternalHref(href: string): boolean {
+  return /^https?:\/\//i.test(href.trim());
+}
+
 /** "Jun 27, 2026" — the display date format used across the site. */
 export function displayDate(d: Date): string {
   return d.toLocaleDateString("en-US", {
