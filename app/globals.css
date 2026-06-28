@@ -1,3 +1,25 @@
+/* Skip-to-content link — hidden until keyboard-focused. */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  transform: translateY(-150%);
+  background: var(--copper, #c17c56);
+  color: #1a0f0a;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #1a0f0a;
+}
+
 /* ============================================================
    Design tokens — dark is the default, light overrides on [data-theme="light"].
    Values ported verbatim from the Claude Design source.

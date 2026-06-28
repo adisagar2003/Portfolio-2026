@@ -68,7 +68,12 @@ export default function RootLayout({
           <link rel="dns-prefetch" href={supabaseOrigin} />
         </head>
       ) : null}
-      <body>{children}</body>
+      <body>
+        <a href="#top" className="skip-link">
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }
