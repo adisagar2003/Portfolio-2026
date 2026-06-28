@@ -14,6 +14,9 @@ export interface NormalizedPostInput {
   overwrite: boolean;
 }
 
+export const MAX_TITLE_LEN = 200;
+export const MAX_BODY_LEN = 100_000;
+
 export type ParseResult =
   | { ok: true; value: NormalizedPostInput }
   | { ok: false; error: string };
@@ -49,6 +52,12 @@ export function parsePostInput(payload: unknown): ParseResult {
   }
   if (typeof p.body !== "string" || p.body.trim() === "") {
     return { ok: false, error: "body (markdown) is required and must be a non-empty string." };
+  }
+  if (p.title.trim().length > MAX_TITLE_LEN) {
+    return { ok: false, error: `title must be ${MAX_TITLE_LEN} characters or fewer.` };
+  }
+  if (p.body.length > MAX_BODY_LEN) {
+    return { ok: false, error: `body must be ${MAX_BODY_LEN} characters or fewer.` };
   }
 
   const sortRaw = Number(p.sort_order);

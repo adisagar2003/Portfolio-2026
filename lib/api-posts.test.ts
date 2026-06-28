@@ -1,5 +1,28 @@
 import { describe, it, expect } from "vitest";
-import { parsePostInput, parseDeleteInput } from "./api-posts";
+import {
+  parsePostInput,
+  parseDeleteInput,
+  MAX_TITLE_LEN,
+  MAX_BODY_LEN,
+} from "./api-posts";
+
+describe("parsePostInput length limits", () => {
+  it("rejects an over-long title", () => {
+    const r = parsePostInput({ title: "x".repeat(MAX_TITLE_LEN + 1), body: "b" });
+    expect(r.ok).toBe(false);
+  });
+  it("rejects an over-long body", () => {
+    const r = parsePostInput({ title: "t", body: "x".repeat(MAX_BODY_LEN + 1) });
+    expect(r.ok).toBe(false);
+  });
+  it("accepts content at the limits", () => {
+    const r = parsePostInput({
+      title: "x".repeat(MAX_TITLE_LEN),
+      body: "x".repeat(MAX_BODY_LEN),
+    });
+    expect(r.ok).toBe(true);
+  });
+});
 
 describe("parseDeleteInput", () => {
   it("requires a non-empty string slug", () => {
