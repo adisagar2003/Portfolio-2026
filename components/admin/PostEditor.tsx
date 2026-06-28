@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
 import Markdown from "@/components/Markdown";
 import { createClient } from "@/lib/supabase/client";
+import { imageFileError } from "@/lib/upload";
 import {
   slugify,
   buildMeta,
@@ -85,6 +86,7 @@ export default function PostEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -312,7 +314,12 @@ export default function PostEditor({
   // ---- image upload --------------------------------------------------------
   const uploadImage = useCallback(
     async (file: File) => {
-      if (!file.type.startsWith("image/")) return;
+      const err = imageFileError(file.type, file.size);
+      if (err) {
+        setUploadError(err);
+        return;
+      }
+      setUploadError(null);
       // unique token so concurrent/same-named uploads never swap into the
       // wrong slot (String.replace would otherwise hit the first match).
       const token = `![uploading ${file.name}…](#upload-${rand()}${rand()})`;
@@ -345,7 +352,13 @@ export default function PostEditor({
   }
 
   async function uploadCover(file: File | undefined) {
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file) return;
+    const err = imageFileError(file.type, file.size);
+    if (err) {
+      setUploadError(err);
+      return;
+    }
+    setUploadError(null);
     setCoverBusy(true);
     try {
       const supabase = createClient();
@@ -906,6 +919,9 @@ export default function PostEditor({
         {words} words · {readTime(body)} min read
         {uploading ? " · uploading image…" : ""}
         {savedAt ? ` · draft autosaved ${savedAt}` : ""}
+        {uploadError ? (
+          <span style={{ color: "#e57368" }}> · {uploadError}</span>
+        ) : null}
       </div>
 
       {/* image library modal */}
