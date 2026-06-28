@@ -1,5 +1,5 @@
 import { getContent } from "@/lib/content";
-import ShaderBackground from "@/components/ShaderBackground";
+import ShaderBackground from "@/components/ShaderBackgroundClient";
 import RevealController from "@/components/RevealController";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
