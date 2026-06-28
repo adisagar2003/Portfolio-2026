@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/service";
 import { slugify, buildMeta, autoExcerpt, uniqueSlug } from "@/lib/post-utils";
+import { postSummary } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,38 @@ function authorized(req: NextRequest): boolean {
 
 function bad(status: number, error: string) {
   return NextResponse.json({ error }, { status });
+}
+
+/** List all posts (incl. drafts) so agents can introspect before writing. */
+export async function GET(req: NextRequest) {
+  if (!process.env.BLOG_API_KEY) {
+    return bad(500, "BLOG_API_KEY is not configured on the server.");
+  }
+  if (!authorized(req)) return bad(401, "Invalid or missing API key.");
+
+  let supabase;
+  try {
+    supabase = createServiceClient();
+  } catch (e) {
+    return bad(500, (e as Error).message);
+  }
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("slug, title, published, date, created_at")
+    .order("created_at", { ascending: false });
+  if (error) return bad(500, error.message);
+
+  const posts = (data ?? []).map((r) =>
+    postSummary({
+      slug: r.slug,
+      title: r.title,
+      published: r.published,
+      date: r.date,
+      createdAt: r.created_at,
+    }),
+  );
+  return NextResponse.json({ count: posts.length, posts });
 }
 
 export async function POST(req: NextRequest) {

@@ -23,6 +23,27 @@ export function postTimestamp(p: DatedPost): number {
   return 0;
 }
 
+export interface PostSummary {
+  slug: string;
+  title: string;
+  published: boolean;
+  url: string;
+  date: string;
+}
+
+/** Compact, API-friendly view of a post row (for GET /api/posts). */
+export function postSummary(
+  row: { slug: string; title?: string; published?: boolean } & DatedPost,
+): PostSummary {
+  return {
+    slug: row.slug,
+    title: row.title ?? "",
+    published: row.published ?? false,
+    url: `/writing/${row.slug}`,
+    date: displayDateFor(row),
+  };
+}
+
 /** The display date for a post: the authored date if parseable, else createdAt. */
 export function displayDateFor(p: DatedPost): string {
   return formatPostDate(p.date ?? "") || formatPostDate(p.createdAt ?? "");

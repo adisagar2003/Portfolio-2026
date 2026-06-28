@@ -7,7 +7,34 @@ import {
   articleMeta,
   metaDescription,
   adjacentPosts,
+  postSummary,
 } from "./posts";
+
+describe("postSummary", () => {
+  it("maps a row to a compact API view", () => {
+    expect(
+      postSummary({
+        slug: "a",
+        title: "Hello",
+        published: true,
+        date: "Jun 24, 2026",
+      }),
+    ).toEqual({
+      slug: "a",
+      title: "Hello",
+      published: true,
+      url: "/writing/a",
+      date: "Jun 24, 2026",
+    });
+  });
+
+  it("defaults missing title/published", () => {
+    const s = postSummary({ slug: "x" });
+    expect(s.title).toBe("");
+    expect(s.published).toBe(false);
+    expect(s.url).toBe("/writing/x");
+  });
+});
 
 describe("adjacentPosts", () => {
   const posts = [{ slug: "c" }, { slug: "b" }, { slug: "a" }]; // newest-first
