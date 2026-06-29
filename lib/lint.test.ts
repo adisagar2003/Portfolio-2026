@@ -4,7 +4,7 @@ import { lintPostBody } from "./lint";
 describe("lintPostBody", () => {
   it("returns no warnings for clean content", () => {
     expect(
-      lintPostBody("## Section\n\n![a cat](cat.png)\n\n[home](/)"),
+      lintPostBody("## Section\n\n![a cat](/cat.png)\n\n[home](/)"),
     ).toEqual([]);
   });
 
@@ -36,5 +36,15 @@ describe("lintPostBody", () => {
   it("pluralizes counts", () => {
     const w = lintPostBody("![](a.png)\n![](b.png)");
     expect(w[0]).toMatch(/2 images are missing/);
+  });
+
+  it("flags relative image paths", () => {
+    const w = lintPostBody("![cat](images/cat.png)");
+    expect(w.some((m) => /relative path/.test(m))).toBe(true);
+  });
+
+  it("does not flag absolute or root-relative image paths", () => {
+    expect(lintPostBody("![cat](https://cdn/cat.png)")).toEqual([]);
+    expect(lintPostBody("![cat](/cat.png)")).toEqual([]);
   });
 });

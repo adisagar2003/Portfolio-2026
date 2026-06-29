@@ -20,6 +20,20 @@ export function lintPostBody(md: string): string[] {
     );
   }
 
+  // Images with a relative path won't resolve on the article page.
+  let relative = 0;
+  const imgRe = /!\[[^\]]*\]\(\s*([^)\s]+)/g;
+  let im: RegExpExecArray | null;
+  while ((im = imgRe.exec(md)) !== null) {
+    const src = im[1];
+    if (!/^(https?:\/\/|\/|data:)/.test(src)) relative++;
+  }
+  if (relative > 0) {
+    warnings.push(
+      `${relative} image${relative > 1 ? "s use" : " uses"} a relative path that may not resolve.`,
+    );
+  }
+
   // A top-level H1 in the body: the post title is already the page's H1.
   let inFence = false;
   let hasH1 = false;
