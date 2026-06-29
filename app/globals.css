@@ -711,6 +711,13 @@ button {
   font-size: 11.5px;
   color: var(--txt-3);
 }
+.footer-link {
+  color: var(--copper-2);
+  text-decoration: none;
+}
+.footer-link:hover {
+  color: var(--copper);
+}
 
 /* ============================================================ Article page ============================================================ */
 .article-nav {

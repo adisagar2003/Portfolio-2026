@@ -6,7 +6,13 @@ export default function Footer({ site }: { site: SiteMeta }) {
       <div className="footer-divider" aria-hidden="true" />
       <div className="footer-row">
         <span>{site.footerLeft}</span>
-        <span>{site.footerRight}</span>
+        <span>
+          {site.footerRight}
+          {" · "}
+          <a href="/feed.xml" className="footer-link">
+            RSS
+          </a>
+        </span>
       </div>
     </footer>
   );
