@@ -138,6 +138,10 @@ describe("wordCount", () => {
   it("counts real words only", () => {
     expect(wordCount("the quick brown fox")).toBe(4);
   });
+
+  it("ignores HTML comments", () => {
+    expect(wordCount("<!-- a b c -->one two")).toBe(2);
+  });
 });
 
 describe("buildMeta", () => {
@@ -153,5 +157,9 @@ describe("autoExcerpt", () => {
     expect(ex.length).toBeLessThanOrEqual(31);
     expect(ex).not.toContain("#");
     expect(ex).not.toContain("**");
+  });
+
+  it("ignores HTML comments", () => {
+    expect(autoExcerpt("<!-- internal note -->Hello world")).toBe("Hello world");
   });
 });

@@ -24,6 +24,7 @@ export function uniqueSlug(base: string, taken: string[]): string {
 /** Word count of markdown body (strips syntax noise roughly). */
 export function wordCount(md: string): number {
   const text = md
+    .replace(/<!--[\s\S]*?-->/g, " ") // html comments
     .replace(/```[\s\S]*?```/g, " ") // code blocks
     .replace(/`[^`]*`/g, " ") // inline code
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
@@ -95,6 +96,7 @@ export function buildMeta(date: string, md: string): string {
 /** First ~155 chars of plain text, for an auto excerpt. */
 export function autoExcerpt(md: string, max = 155): string {
   const text = md
+    .replace(/<!--[\s\S]*?-->/g, " ")
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
