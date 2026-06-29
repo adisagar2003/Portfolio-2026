@@ -122,6 +122,9 @@ export default async function WritingPage({ params }: Props) {
             {readTime(post.body)} min read
           </div>
           <h1 className="article-title">{post.title}</h1>
+          <div className="article-byline">
+            by <span className="article-byline-name">{profile.name}</span>
+          </div>
           {toc.length >= 3 ? <ArticleToc headings={toc} /> : null}
           <div className="article-md">
             <Markdown body={post.body} />

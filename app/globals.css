@@ -962,6 +962,14 @@ button {
   font-size: 15px;
   line-height: 1.3;
 }
+.article-byline {
+  font-size: 14px;
+  color: var(--txt-3);
+  margin: -14px 0 30px;
+}
+.article-byline-name {
+  color: var(--copper-2);
+}
 .article-cover-wrap {
   position: relative;
   width: 100%;
