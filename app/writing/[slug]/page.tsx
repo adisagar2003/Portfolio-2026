@@ -37,8 +37,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(slug);
   if (!post) return {};
 
-  const { site } = await getContent();
+  const { site, profile } = await getContent();
   const description = metaDescription(post, site.description);
+  // Every post gets a social image: its cover, else the author avatar.
+  const ogImage = post.coverUrl || profile.avatarUrl;
 
   return {
     metadataBase: new URL(site.url),
@@ -51,13 +53,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${site.url}/writing/${post.slug}`,
       type: "article",
       publishedTime: post.date,
-      images: post.coverUrl ? [{ url: post.coverUrl }] : undefined,
+      images: ogImage ? [{ url: ogImage }] : undefined,
     },
     twitter: {
-      card: "summary_large_image",
+      card: post.coverUrl ? "summary_large_image" : "summary",
       title: post.title,
       description,
-      images: post.coverUrl ? [post.coverUrl] : undefined,
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }
