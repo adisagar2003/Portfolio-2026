@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `${site.url}/writing/${post.slug}`,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: isoDate(post) || undefined,
       images: ogImage ? [{ url: ogImage }] : undefined,
     },
     twitter: {
