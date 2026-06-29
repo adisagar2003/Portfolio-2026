@@ -1080,6 +1080,33 @@ button {
   border-radius: 5px;
   padding: 2px 6px;
 }
+.article-md .code-wrap {
+  position: relative;
+}
+.article-md .code-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  border: 1px solid var(--bord-2);
+  background: var(--bg-3, #15151a);
+  color: var(--txt-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.article-md .code-wrap:hover .code-copy,
+.article-md .code-copy:focus {
+  opacity: 1;
+}
+.article-md .code-copy:hover {
+  border-color: var(--copper);
+  color: var(--copper-2);
+}
 .article-md pre {
   background: var(--bg-2);
   border: 1px solid var(--bord);

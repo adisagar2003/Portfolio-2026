@@ -1,6 +1,7 @@
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import CodeBlock from "@/components/CodeBlock";
 import {
   isExternalHref,
   flattenText,
@@ -62,6 +63,7 @@ export default function Markdown({ body }: { body: string }) {
         </div>
       );
     },
+    pre: (props) => <CodeBlock {...props} />,
     a(props) {
       const href = String(props.href ?? "");
       if (isExternalHref(href)) {
