@@ -93,11 +93,14 @@ export function buildMeta(date: string, md: string): string {
   return `${date} · ${readTime(md)} min read`;
 }
 
-/** First ~155 chars of plain text, for an auto excerpt. */
+/** First ~155 chars of plain prose, for an auto excerpt (skips headings). */
 export function autoExcerpt(md: string, max = 155): string {
   const text = md
     .replace(/<!--[\s\S]*?-->/g, " ")
     .replace(/```[\s\S]*?```/g, " ")
+    .split("\n")
+    .filter((l) => !/^\s*#{1,6}\s/.test(l)) // drop heading lines
+    .join(" ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/[#>*_~`]/g, "")

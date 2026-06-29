@@ -162,4 +162,10 @@ describe("autoExcerpt", () => {
   it("ignores HTML comments", () => {
     expect(autoExcerpt("<!-- internal note -->Hello world")).toBe("Hello world");
   });
+
+  it("skips leading heading lines so it starts with prose", () => {
+    const ex = autoExcerpt("# My Title\n\nThe real intro paragraph follows.");
+    expect(ex).toBe("The real intro paragraph follows.");
+    expect(ex).not.toContain("My Title");
+  });
 });
