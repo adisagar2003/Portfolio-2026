@@ -1095,6 +1095,53 @@ button {
   font-size: 13.5px;
   line-height: 1.6;
 }
+/* Syntax highlighting (rehype-highlight, dark copper-tinted theme) */
+.article-md .hljs-comment,
+.article-md .hljs-quote {
+  color: var(--txt-3);
+  font-style: italic;
+}
+.article-md .hljs-keyword,
+.article-md .hljs-selector-tag,
+.article-md .hljs-literal,
+.article-md .hljs-type {
+  color: #e08a5c;
+}
+.article-md .hljs-string,
+.article-md .hljs-attr,
+.article-md .hljs-template-string {
+  color: #c9b08a;
+}
+.article-md .hljs-number,
+.article-md .hljs-symbol,
+.article-md .hljs-bullet {
+  color: #d98b6a;
+}
+.article-md .hljs-title,
+.article-md .hljs-function .hljs-title,
+.article-md .hljs-section,
+.article-md .hljs-name {
+  color: #e6c07b;
+}
+.article-md .hljs-built_in,
+.article-md .hljs-class .hljs-title,
+.article-md .hljs-variable.language_ {
+  color: #c1875a;
+}
+.article-md .hljs-attribute,
+.article-md .hljs-variable,
+.article-md .hljs-tag {
+  color: var(--silver);
+}
+.article-md .hljs-meta {
+  color: var(--txt-3);
+}
+.article-md .hljs-emphasis {
+  font-style: italic;
+}
+.article-md .hljs-strong {
+  font-weight: 700;
+}
 .article-md hr {
   border: none;
   height: 1px;

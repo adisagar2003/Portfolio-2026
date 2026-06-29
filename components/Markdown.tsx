@@ -1,5 +1,6 @@
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import {
   isExternalHref,
   flattenText,
@@ -71,7 +72,11 @@ export default function Markdown({ body }: { body: string }) {
   };
 
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[[rehypeHighlight, { detect: true, ignoreMissing: true }]]}
+      components={components}
+    >
       {body}
     </ReactMarkdown>
   );
