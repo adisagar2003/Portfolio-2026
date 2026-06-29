@@ -24,7 +24,7 @@ function fromJson(): PortfolioContent {
   return {
     site: siteJson as SiteMeta,
     profile: profileJson as Profile,
-    posts: writingJson as Post[],
+    posts: sortPostsByDateDesc(writingJson as Post[]),
     sections: sectionsJson as Section[],
     contact: contactJson as ContactBlock,
   };
