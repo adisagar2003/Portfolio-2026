@@ -53,6 +53,14 @@ export default function Markdown({ body }: { body: string }) {
       // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
       return <img {...props} loading="lazy" decoding="async" />;
     },
+    table(props) {
+      // wrap so wide tables scroll instead of breaking the layout on mobile
+      return (
+        <div className="table-wrap">
+          <table {...props} />
+        </div>
+      );
+    },
     a(props) {
       const href = String(props.href ?? "");
       if (isExternalHref(href)) {
