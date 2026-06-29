@@ -169,6 +169,29 @@ export async function reorderPost(fd: FormData) {
   done(err, "post-reordered");
 }
 
+/** Flip a post's published state from the list without opening the editor. */
+export async function togglePublished(fd: FormData) {
+  const { supabase } = await requireAdmin();
+  let err: string | null = null;
+  try {
+    const slug = str(fd, "slug");
+    const { data, error } = await supabase
+      .from("posts")
+      .select("published")
+      .eq("slug", slug)
+      .single();
+    if (error) throw new Error(error.message);
+    const { error: upErr } = await supabase
+      .from("posts")
+      .update({ published: !data.published })
+      .eq("slug", slug);
+    if (upErr) throw new Error(upErr.message);
+  } catch (e) {
+    err = (e as Error).message;
+  }
+  done(err, "post");
+}
+
 export async function deletePost(fd: FormData) {
   const { supabase } = await requireAdmin();
   let err: string | null = null;

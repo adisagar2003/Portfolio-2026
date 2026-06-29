@@ -16,11 +16,13 @@ export default function PostList({
   upsertPost,
   deletePost,
   reorderPost,
+  togglePublished,
 }: {
   posts: PostRow[];
   upsertPost: (fd: FormData) => void;
   deletePost: (fd: FormData) => void;
   reorderPost: (fd: FormData) => void;
+  togglePublished: (fd: FormData) => void;
 }) {
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -183,6 +185,12 @@ export default function PostList({
               >
                 Duplicate as template
               </button>
+              <form action={togglePublished} style={{ display: "inline" }}>
+                <input type="hidden" name="slug" value={post.slug} />
+                <button className="admin-btn" type="submit">
+                  {post.published ? "Unpublish" : "Publish"}
+                </button>
+              </form>
               <form action={deletePost} style={{ display: "inline" }}>
                 <button
                   className="admin-btn admin-btn-danger"

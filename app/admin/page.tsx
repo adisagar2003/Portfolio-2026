@@ -7,6 +7,7 @@ import {
   upsertPost,
   deletePost,
   reorderPost,
+  togglePublished,
   updateSection,
   upsertEntry,
   deleteEntry,
@@ -98,6 +99,7 @@ export default async function AdminPage({
           upsertPost={upsertPost}
           deletePost={deletePost}
           reorderPost={reorderPost}
+          togglePublished={togglePublished}
           posts={postRows.map((post) => ({
             slug: post.slug,
             date: post.date,
